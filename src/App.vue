@@ -1,32 +1,33 @@
 <template>
   <div id="app">
-    <div class="container">
-      <Todos />
-    </div>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import Todos from "./components/Todo.vue";
 
 export default {
-  name: "App",
-  components: {
-    Todos,
-  },
-};
+  name: 'App',
+}
 </script>
 
 <style>
-body {
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  line-height: 1.6;
-  background: #e8f7f0;
+*,*:before,*:after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
 }
-.container {
-  max-width: 1100px;
-  margin: auto;
-  overflow: auto;
-  padding: 0 2rem;
+
+ul {
+  list-style: none;
+}
+
+:root {
+  --maincolor: #27ae60;
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 </style>
