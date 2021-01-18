@@ -30,4 +30,18 @@ ul {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.content {
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.title_form {
+  display: block;
+  color: #27ae60;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 </style>

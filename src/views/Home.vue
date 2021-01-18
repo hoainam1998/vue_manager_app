@@ -2,7 +2,6 @@
     <main>
         <Menu />
         <MainContent />
-        <h1>home</h1>
     </main>
 </template>
 <script>

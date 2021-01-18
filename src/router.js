@@ -4,6 +4,8 @@ import Home from './views/Home'
 import Login from './views/Login'
 import Create_user from './views/Create_User'
 import Table from './views/Table'
+import User from './views/User_board'
+import Product from './views/Product_board'
 Vue.use(Router)
 
 export default new Router({
@@ -19,12 +21,22 @@ export default new Router({
             component: Home,
             children:[
                 {
-                    path: 'create',
-                    component: Create_user
+                    path: 'user',
+                    component: User,
+                    children:[
+                        {
+                            path: '/',
+                            component: Table
+                        },
+                        {
+                            path: 'create_user',
+                            component: Create_user
+                        }
+                    ]
                 },
                 {
-                    path: '/',
-                    component: Table
+                    path: '/sanpham',
+                    component: Product
 
                 }
             ]

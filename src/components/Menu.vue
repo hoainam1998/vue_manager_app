@@ -5,8 +5,8 @@
       <li>
         <span >Cai dat<i class="fas fa-caret-down"></i></span>
         <ul class="sub_list">
-          <li>Nguoi dung</li>
-          <li>San pham</li>
+          <li><router-link to="/user">Nguoi dung</router-link></li>
+          <li><router-link to="/sanpham">San pham</router-link></li>
         </ul>
       </li>
       <li>Quan li</li>
@@ -62,5 +62,9 @@ export default {
 
 .fa-caret-down {
   float: right;
+}
+.sub_list a {
+  color: white;
+  text-decoration: none;
 }
 </style>

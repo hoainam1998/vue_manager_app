@@ -3,13 +3,20 @@
     <div class="manipulation">
       <div>
         <h2>Danh sach nguoi dung</h2>
-        <button class="create_user">Tao nguoi dung</button>
+        <b-button variant="success">
+          <router-link to="user/create_user" class="create_user">
+            Tao nguoi dung</router-link>
+          </b-button>
       </div>
       <div>
         <input type="number" class="form-control" v-model="perPage" />
-        <div class="search">
-          <input type="text" />
-          <button>tim kiem</button>
+        <div>
+          <b-input-group size="sm" class="mb-3">
+            <b-form-input></b-form-input>
+            <b-input-group-append>
+              <b-button size="sm" text="Button" variant="success">Tim kiem</b-button>
+            </b-input-group-append>
+          </b-input-group>
         </div>
       </div>
     </div>
@@ -22,17 +29,18 @@
       small
     >
       <template #cell(thao_tac)="row">
-        <button class="update" @click="show(row.item)" >
-           <i class="fas fa-edit"></i>
+        <button class="update" @click="show(row.item)">
+          <i class="fas fa-edit"></i>
         </button>
 
         <!-- As `row.showDetails` is one-way, we call the toggleDetails function on @change -->
       </template>
-      </b-table>
-    
+    </b-table>
+
     <div class="pagination_table">
       <div>
-        <span>{{currentPage}}</span>-<span>{{ totalPage }}</span> /tong so <span>{{ totalPage }}</span>
+        <span>{{ currentPage }}</span
+        >-<span>{{ totalPage }}</span> /tong so <span>{{ totalPage }}</span>
       </div>
       <div>
         <b-pagination
@@ -74,9 +82,9 @@ export default {
   },
   methods: {
     ...mapActions("user", ["setUsers"]),
-    show(item){
-        console.log(item)
-    }
+    show(item) {
+      console.log(item);
+    },
   },
   async created() {
     await this.setUsers();
@@ -85,13 +93,6 @@ export default {
 };
 </script>
 <style scoped>
-.content {
-  background: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  padding: 8px;
-  border-radius: 5px;
-}
-
 .manipulation div {
   display: flex;
   justify-content: space-between;
@@ -99,12 +100,13 @@ export default {
 }
 
 .create_user {
-  background: var(--maincolor);
+  display: block;
   width: 150px;
   border: none;
   outline: none;
   border-radius: 4px;
   color: white;
+  text-decoration: none;
 }
 
 input[type="number"] {
@@ -144,9 +146,9 @@ tbody tr td:last-child {
 }
 
 .update {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--maincolor);
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--maincolor);
 }
 </style>
