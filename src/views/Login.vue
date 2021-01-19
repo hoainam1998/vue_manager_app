@@ -15,11 +15,12 @@
             name="tendanhnhap"
             placeholder="vd:hoainam"
             v-model="user.tendangnhap"
+            required
           />
         </div>
         <div>
           <label>Mat khau</label>
-          <input type="password" name="matkhau" v-model="user.matkhau" />
+          <input type="password" name="matkhau" v-model="user.matkhau" required/>
         </div>
         <button type="submit">Dang nhap</button>
       </form>
@@ -46,7 +47,7 @@ export default {
       let errs = [];
       let list_user_authen = this.$store.getters["user/getUsers"];
       const tendangnhap_exist = list_user_authen.findIndex(
-        (user) => user.tendangnhap === this.user.tendangnhap
+        (user) => user.ten_dang_nhap === this.user.tendangnhap
       );
       const matkhau_exist = list_user_authen.findIndex(
         (user) => user.matkhau === this.user.matkhau
@@ -58,7 +59,7 @@ export default {
       } else {
         let user_authen = list_user_authen.find(
           (user) =>
-            user.tendangnhap === this.user.tendangnhap &&
+            user.ten_dang_nhap === this.user.tendangnhap &&
             user.matkhau === this.user.matkhau
         );
         sessionStorage.setItem("user_authen", JSON.stringify(user_authen));

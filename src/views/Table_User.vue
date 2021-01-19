@@ -4,20 +4,22 @@
       <div>
         <h2>Danh sach nguoi dung</h2>
         <b-button variant="success">
-          <router-link to="user/create_user" class="create_user">
-            Tao nguoi dung</router-link>
-          </b-button>
+          <router-link to="create_user" class="create_user">
+            Tao nguoi dung</router-link
+          >
+        </b-button>
       </div>
-      <div>
+      <div class="mb-3">
         <input type="number" class="form-control" v-model="perPage" />
-        <div>
-          <b-input-group size="sm" class="mb-3">
-            <b-form-input></b-form-input>
+        <form @submit.prevent="search()">
+          <b-input-group prepend="Ten day du" class="mt-3">
+            <b-form-input id="search"></b-form-input>
             <b-input-group-append>
-              <b-button size="sm" text="Button" variant="success">Tim kiem</b-button>
+              <b-button variant="outline-success" type="submit">Tim kiem</b-button>
+              <b-button variant="info" @click.prevent="reset">Dat lai</b-button>
             </b-input-group-append>
           </b-input-group>
-        </div>
+        </form>
       </div>
     </div>
     <b-table
@@ -28,19 +30,20 @@
       :fields="fields"
       small
     >
+      <template #cell(ten_day_du)="data">
+        {{ data.value.ho }} {{ data.value.ten }}
+      </template>
       <template #cell(thao_tac)="row">
         <button class="update" @click="show(row.item)">
           <i class="fas fa-edit"></i>
         </button>
-
-        <!-- As `row.showDetails` is one-way, we call the toggleDetails function on @change -->
       </template>
     </b-table>
 
     <div class="pagination_table">
       <div>
-        <span>{{ currentPage }}</span
-        >-<span>{{ totalPage }}</span> /tong so <span>{{ totalPage }}</span>
+        <span>{{ currentPage }}</span>
+        -<span>{{ totalPage }}</span> /tong so <span>{{ totalPage }}</span>
       </div>
       <div>
         <b-pagination
@@ -56,18 +59,18 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  name: "Table",
+  name: "Table_User",
   data() {
     return {
       perPage: 5,
       currentPage: 1,
       fields: [
         { key: "id", thClass: "d-none", tdClass: "d-none" },
-        "ten_day_du",
-        "ten_dang_nhap",
-        "ngay_duoc_tao",
-        "trang_thai",
-        "thao_tac",
+        { key: "ten_day_du", label: "Tên Đầy Đủ" },
+        { key: "ten_dang_nhap", label: "Tên Đăng Nhập" },
+        { key: "ngay_duoc_tao", label: "Ngày Được Tạo" },
+        { key: "trang_thai", label: "Trạng Thái" },
+        { key: "thao_tac", label: "Thao Tác" },
       ],
       users: [],
     };
@@ -81,14 +84,25 @@ export default {
     },
   },
   methods: {
-    ...mapActions("user", ["setUsers"]),
+    ...mapActions("user", ["setUsers", "setSpecificUser", "searchUser"]),
     show(item) {
-      console.log(item);
+      this.setSpecificUser(item);
+      location.href = "#/home/create_user";
     },
+
+    search() {
+      let value_search = document.querySelector("#search").value;
+      this.searchUser(value_search);
+      this.users = this.$store.getters["user/getUserSearched"];
+    },
+
+    reset(){
+      this.users = this.$store.getters["user/getUsers"];
+    }
   },
-  async created() {
-    await this.setUsers();
+  created() {
     this.users = this.$store.getters["user/getUsers"];
+    console.log(this.users);
   },
 };
 </script>
@@ -96,7 +110,6 @@ export default {
 .manipulation div {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
 }
 
 .create_user {
@@ -114,41 +127,4 @@ input[type="number"] {
   height: 35px;
 }
 
-.search input {
-  outline: none;
-  height: 30px;
-  border: 1.5px solid #bdc3c7;
-  padding-left: 7px;
-}
-
-.search button {
-  background: var(--maincolor);
-  color: white;
-  text-transform: capitalize;
-  outline: none;
-  padding: 3.5px 5px;
-  border: none;
-}
-
-tbody tr td:last-child {
-  color: var(--maincolor);
-  padding-left: 50px;
-}
-
-.pagination_table {
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-}
-
-.active {
-  background: var(--maincolor) !important;
-}
-
-.update {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--maincolor);
-}
 </style>
