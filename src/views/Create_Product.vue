@@ -84,7 +84,7 @@ export default {
         };
 
         this.createProducts(product);
-        location.href="#/home/product"
+        this.$router.push('/home/product')
       }
     },
 
