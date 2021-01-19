@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "tensanpham": "Apple",
+        "ngaytao": "12/4/2020 , 3:06:55 PM",
+        "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
+        "gia": 20000,
+        "trangthai":"hoat dong"
+    },
+    {
+        "id": 2,
+        "tensanpham": "Banana",
+        "ngaytao": "12/4/2020 , 3:06:55 PM",
+        "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
+        "gia": 22000,
+        "trangthai":"Ko hoat dong"
+    },
+    {
+        "id": 1,
+        "tensanpham": "Grapes",
+        "ngaytao": "12/4/2020 , 3:06:55 PM",
+        "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
+        "gia": 25000,
+        "trangthai":"hoat dong"
+    },
+    {
+        "id": 1,
+        "tensanpham": "Strawberry",
+        "ngaytao": "12/4/2020 , 3:06:55 PM",
+        "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
+        "gia": 20000,
+        "trangthai":"Ko hoat dong"
+    },
+    {
+        "id": 1,
+        "tensanpham": "Orange",
+        "ngaytao": "12/4/2020 , 3:06:55 PM",
+        "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
+        "gia": 20000,
+        "trangthai":"hoat dong"
+    }
+]

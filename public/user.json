@@ -4,7 +4,7 @@
         "power": "admin",
         "ten_dang_nhap": "hoainam",
         "matkhau": "hoainam1999",
-        "ten_day_du": "nguyen hoai nam",
+        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "dang lam"
     },
@@ -13,7 +13,7 @@
         "power": "user",
         "ten_dang_nhap": "user1",
         "matkhau": "user1",
-        "ten_day_du": "nguyen van c",
+        "ten_day_du":{"ten": "van a","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "da nghi"
     },
@@ -22,7 +22,7 @@
         "power": "user",
         "ten_dang_nhap": "user2",
         "matkhau": "user2",
-        "ten_day_du": "nguyen van d",
+        "ten_day_du":{"ten": "van b","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "dang lam"
     },
@@ -31,7 +31,7 @@
         "power": "user",
         "ten_dang_nhap": "user3",
         "matkhau": "user3",
-        "ten_day_du": "nguyen van e",
+        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "da nghi"
     },
@@ -40,7 +40,7 @@
         "power": "user",
         "ten_dang_nhap": "user4",
         "matkhau": "user",
-        "ten_day_du": "nguyen van f",
+        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "dang lam"
     },
@@ -49,7 +49,7 @@
         "power": "user",
         "ten_dang_nhap": "user5",
         "matkhau": "user5",
-        "ten_day_du": "nguyen van g",
+        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "dang lam"
     },
@@ -58,7 +58,7 @@
         "power": "user",
         "ten_dang_nhap": "user6",
         "matkhau": "user6",
-        "ten_day_du": "nguyen van n",
+        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "da nghi"
     },
@@ -67,7 +67,7 @@
         "power": "admin",
         "ten_dang_nhap": "admin",
         "matkhau": "admin",
-        "ten_day_du": "nguyen tuan",
+        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
         "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
         "trang_thai": "dang lam"
     }

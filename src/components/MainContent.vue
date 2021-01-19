@@ -5,12 +5,12 @@
   </section>
 </template>
 <script>
-import UserInfor from "./UserInfor";
+import UserInfor from "./UserInfor"
 export default {
   name: "MainContent",
   components: {
     UserInfor,
-  },
+  }
 };
 </script>
 <style scoped>

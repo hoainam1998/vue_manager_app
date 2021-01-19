@@ -5,9 +5,17 @@
 </template>
 
 <script>
-
+import {mapActions} from 'vuex'
 export default {
   name: 'App',
+  methods:{
+    ...mapActions('user',['setUsers']),
+    ...mapActions('product',['setProducts'])
+  },
+  async created(){
+    await this.setUsers();
+    await this.setProducts()
+  }
 }
 </script>
 
@@ -43,5 +51,18 @@ ul {
   color: #27ae60;
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.update {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--maincolor);
+}
+
+.pagination_table {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
 }
 </style>

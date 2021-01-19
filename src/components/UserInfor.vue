@@ -2,15 +2,23 @@
   <section class="user_infor_layout">
     <div class="user_box">
         <img src="../assets/user.svg" alt="logo" />
-        <span>user<i class="fas fa-caret-down"></i></span>
+        <span>{{this.username}}<i class="fas fa-caret-down"></i></span>
     </div>
   </section>
 </template>
 <script>
 export default {
   name: "Userinfor",
+  data(){
+    return {
+      username:''
+    }
+  },
   created(){
-    console.log(JSON.parse(sessionStorage.getItem('user_authen')))
+    let user_auth=JSON.parse(sessionStorage.getItem('user_authen'))
+    if(user_auth){
+      this.username=user_auth.ten_dang_nhap
+    }
   }
 };
 </script>

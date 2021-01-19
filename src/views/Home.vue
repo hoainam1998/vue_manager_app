@@ -13,6 +13,17 @@ export default {
     Menu,
     MainContent
   },
+  methods:{
+    auth_user(){
+      let sessionUser=JSON.parse(sessionStorage.getItem("user_authen"));
+      if(sessionUser===null){
+        location.href="/"
+      }
+    }
+  },
+  created(){
+    this.auth_user();
+  }
 };
 </script>
 <style scoped>
