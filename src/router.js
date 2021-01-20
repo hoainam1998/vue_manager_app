@@ -28,7 +28,7 @@ const router = new Router({
                     path: '',
                     component: User,
                     name: "user",
-                    meta: { requiresAuth: true, is_admin: true },
+                    meta: { requiresAuth: true, is_admin: true},
                     children: [
                         {
                             path: '',
@@ -36,8 +36,8 @@ const router = new Router({
                             component: Table_User,
                         },
                         {
-                            name: 'create_user',
                             path: 'create_user',
+                            name: 'create_user',
                             component: Create_user
                         }
                     ]
@@ -51,12 +51,14 @@ const router = new Router({
                         {
                             path: '',
                             name: "product_table",
-                            component: Table_Product
+                            component: Table_Product,
+                            meta: {requiresAuth:true}
                         },
                         {
                             name: "create_product",
                             path: "create_product",
-                            component: Create_Product
+                            component: Create_Product,
+                            meta:{requiresAuth:true}
                         }
                     ]
                 }
@@ -67,6 +69,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
+        console.log('au')
         let user_auth = JSON.parse(sessionStorage.getItem('user_authen'));
         if (user_auth !== null) {
             if (to.matched.some((record) => record.meta.is_admin)) {
@@ -75,15 +78,15 @@ router.beforeEach((to, from, next) => {
                 }
                 else {
                     console.log(to)
-                   next('/home/product')
+                    next('home/product')
                 }
-            }else {
+            } else {
                 next()
             }
         } else {
             next('/')
         }
-    } else {
+    } else if(to.matched.some((record) => record.meta.guest)){
         next()
     }
 });
