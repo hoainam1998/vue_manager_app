@@ -65,4 +65,11 @@ ul {
   justify-content: space-between;
   align-content: center;
 }
+
+a,
+a:hover {
+  color: white !important;
+  text-decoration: none !important;
+  display: block;
+}
 </style>
