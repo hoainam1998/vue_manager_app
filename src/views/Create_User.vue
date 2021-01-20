@@ -9,7 +9,7 @@
             placeholder="Tao ten dang nhap"
             v-model="newUser.ten_dang_nhap"
             required
-            :disabled="this.disabled"
+            :disabled="disabled"
           ></b-form-input>
         </div>
         <div>
@@ -60,7 +60,7 @@ export default {
       newUser: {
         ten_day_du: { ho: "", ten: "" },
         ten_dang_nhap: "",
-        trang_thai: "dang lam",
+        trang_thai: "da nghi",
       },
       err: "",
       disabled: false,
@@ -78,6 +78,7 @@ export default {
           second: "numeric",
           hour12: true,
         })}`;
+        
       const user_obj = {
         id: v4(),
         power: "user",
@@ -96,7 +97,8 @@ export default {
         this.err = "Ten dang nhap da ton tai";
       } else {
         this.addListUsers(user_obj);
-        location.href = "#/home";
+        // location.href = "#/home";
+        this.$router.push('/home')
       }
     },
 
@@ -107,7 +109,8 @@ export default {
         trang_thai: this.newUser.trang_thai
       }
       this.updateListUsers(update_User);
-      location.href = "#/home";
+      // location.href = "#/home";
+      this.$router.push('/home')
     },
 
     handleSubmit() {
@@ -125,6 +128,10 @@ export default {
       this.disabled = true;
     }
   },
+  beforeDestroy(){
+    this.$store.dispatch('user/setSpecificUser',{});
+    console.log(this.$store.getters['user/getSpecificUser']);
+  }
 };
 </script>
 <style scoped>

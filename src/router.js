@@ -33,6 +33,7 @@ export default new Router({
                             component: Table_User
                         },
                         {
+                            name: 'create_user',
                             path: 'create_user',
                             component: Create_user
                         }

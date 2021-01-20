@@ -5,8 +5,8 @@
       <li>
         <span >Cai dat<i class="fas fa-caret-down"></i></span>
         <ul class="sub_list">
-          <li><router-link :to="{ name: 'user_table' }" >Nguoi dung</router-link></li>
-          <li><router-link :to="{ name: 'product_table'}">San pham</router-link></li>
+          <li><router-link to="/home" >Nguoi dung</router-link></li>
+          <li><router-link to="/home/product" >San pham</router-link></li>
         </ul>
       </li>
       <li>Quan li</li>
