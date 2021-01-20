@@ -1,16 +1,16 @@
 [
     {
         "id": 1,
-        "power": "admin",
+        "admin": true,
         "tendangnhap": "hoainam",
         "matkhau": "hoainam1999",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
-        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
         "trangthai": "dang lam"
     },
     {
         "id": 2,
-        "power": "user",
+        "admin": false,
         "tendangnhap": "user1",
         "matkhau": "user1",
         "tendaydu":{"ten": "van a","ho":"nguyen"},
@@ -19,16 +19,16 @@
     },
     {
         "id": 3,
-        "power": "user",
+        "admin": false,
         "tendangnhap": "user2",
         "matkhau": "user2",
         "tendaydu":{"ten": "van b","ho":"nguyen"},
-        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
         "trangthai": "dang lam"
     },
     {
         "id": 4,
-        "power": "user",
+        "admin": false,
         "tendangnhap": "user3",
         "matkhau": "user3",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
@@ -37,16 +37,16 @@
     },
     {
         "id": 5,
-        "power": "user",
+        "admin": false,
         "tendangnhap": "user4",
         "matkhau": "user",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
-        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
         "trangthai": "dang lam"
     },
     {
         "id": 6,
-        "power": "user",
+        "admin": false,
         "tendangnhap": "user5",
         "matkhau": "user5",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
@@ -55,7 +55,7 @@
     },
     {
         "id": 7,
-        "power": "user",
+        "admin": false,
         "tendangnhap": "user6",
         "matkhau": "user6",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
@@ -64,9 +64,9 @@
     },
     {
         "id": 8,
-        "power": "admin",
-        "tendangnhap": "admin",
-        "matkhau": "admin",
+        "admin": false,
+        "tendangnhap": "user8",
+        "matkhau": "user8",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
         "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
         "trangthai": "dang lam"

@@ -17,7 +17,7 @@ export default {
   created(){
     let user_auth=JSON.parse(sessionStorage.getItem('user_authen'))
     if(user_auth){
-      this.username=user_auth.ten_dang_nhap
+      this.username=user_auth.tendangnhap
     }
   }
 };

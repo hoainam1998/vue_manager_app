@@ -6,31 +6,34 @@ import Create_user from './views/Create_User'
 import Table_User from './views/Table_User'
 import User from './views/User_board'
 import Product from './views/Product_board'
-import Table_Product from'./views/Table_Product'
+import Table_Product from './views/Table_Product'
 import Create_Product from './views/Create_Product'
 Vue.use(Router)
 
-export default new Router({
-    routes:[
+const router = new Router({
+    routes: [
         {
             path: '/',
             name: 'login',
-            component: Login
+            component: Login,
+            meta: { guest: true },
         },
         {
             path: '/home',
             name: 'home',
             component: Home,
-            children:[
+            meta: { requiresAuth: true },
+            children: [
                 {
                     path: '',
                     component: User,
                     name: "user",
-                    children:[
+                    meta: { requiresAuth: true, is_admin: true },
+                    children: [
                         {
                             path: '',
                             name: 'user_table',
-                            component: Table_User
+                            component: Table_User,
                         },
                         {
                             name: 'create_user',
@@ -41,8 +44,10 @@ export default new Router({
                 },
                 {
                     path: 'product',
+                    name: 'product',
                     component: Product,
-                    children:[
+                    meta: { requiresAuth: true },
+                    children: [
                         {
                             path: '',
                             name: "product_table",
@@ -59,3 +64,41 @@ export default new Router({
         }
     ]
 })
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        let user_auth = JSON.parse(sessionStorage.getItem('user_authen'));
+        if (user_auth !== null) {
+            if (to.matched.some((record) => record.meta.is_admin)) {
+                if (user_auth.admin === true) {
+                    next()
+                }
+                else {
+                    console.log(to)
+                   next('/home/product')
+                }
+            }else {
+                next()
+            }
+        } else {
+            next('/')
+        }
+    } else {
+        next()
+    }
+});
+
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some((record) => record.meta.guest)) {
+//         let user_auth = sessionStorage.getItem('user_authen')
+//         if (user_auth !== null) {
+//             next()
+//             return;
+//         } else { next() }
+//     } else {
+//         next()
+//     }
+
+// });
+
+export default router;

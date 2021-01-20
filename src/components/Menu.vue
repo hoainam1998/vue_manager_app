@@ -5,7 +5,7 @@
       <li>
         <span >Cai dat<i class="fas fa-caret-down"></i></span>
         <ul class="sub_list">
-          <li><router-link to="/home" >Nguoi dung</router-link></li>
+          <li v-if="show"><router-link to="/home" >Nguoi dung</router-link></li>
           <li><router-link to="/home/product" >San pham</router-link></li>
         </ul>
       </li>
@@ -15,7 +15,18 @@
 </template>
 <script>
 export default {
-  name: "Menu"
+  name: "Menu",
+  data(){
+    return {
+      show:false
+    }
+  },
+  created(){
+    let user=JSON.parse(sessionStorage.getItem('user_authen'))
+    if(user.admin){
+      this.show=true
+    }
+  }
 };
 </script>
 <style scoped>
