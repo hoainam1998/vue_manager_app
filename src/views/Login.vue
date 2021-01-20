@@ -49,13 +49,19 @@ export default {
       const tendangnhap_exist = list_user_authen.findIndex(
         (user) => user.tendangnhap === this.user.tendangnhap
       );
+
       const matkhau_exist = list_user_authen.findIndex(
         (user) => user.matkhau === this.user.matkhau
       );
+
       if (tendangnhap_exist === -1) {
         errs.push("Ten dang nhap khong dung!");
       } else if (matkhau_exist === -1) {
         errs.push("Mat khau khong dung!");
+      } 
+
+      if (errs.length > 0) {
+        this.errs = errs;
       } else {
         let user_authen = list_user_authen.find(
           (user) =>
@@ -63,11 +69,7 @@ export default {
             user.matkhau === this.user.matkhau
         );
         sessionStorage.setItem("user_authen", JSON.stringify(user_authen));
-      }
-      if (errs.length > 0) {
-        this.errs = errs;
-      } else {
-        this.$router.push('/home')
+        this.$router.push('home')
       }
     },
   },
