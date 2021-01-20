@@ -4,7 +4,7 @@
       <div>
         <h2>Danh sach san pham</h2>
         <b-button variant="success">
-          <router-link to="create_product">Tao san pham</router-link>
+          <router-link to="product/create_product">Tao san pham</router-link>
         </b-button>
       </div>
       <div class="mb-3">
@@ -92,15 +92,18 @@ export default {
   },
   methods: {
     show(item) {
-      console.log(item);
-      //href=#/home/product/create_product
+      this.$store.dispatch('product/setSpecificProduct',item);
+      this.$router.push('product/create_product')
     },
     search(){
-        console.log(document.querySelector('#search').value)
+        let value_search=document.querySelector('#search').value;
+        this.$store.dispatch('product/search',value_search)
+        this.products=this.$store.getters['product/getListProductSearch'];
     },
     reset(){
-        console.log('reset')
-    }
+        this.products=this.$store.getters['product/getProducts'];
+    },
+
   },
   async created() {
     this.products = this.$store.getters["product/getProducts"];

@@ -2,73 +2,73 @@
     {
         "id": 1,
         "power": "admin",
-        "ten_dang_nhap": "hoainam",
+        "tendangnhap": "hoainam",
         "matkhau": "hoainam1999",
-        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "dang lam"
+        "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
+        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "dang lam"
     },
     {
         "id": 2,
         "power": "user",
-        "ten_dang_nhap": "user1",
+        "tendangnhap": "user1",
         "matkhau": "user1",
-        "ten_day_du":{"ten": "van a","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "da nghi"
+        "tendaydu":{"ten": "van a","ho":"nguyen"},
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "da nghi"
     },
     {
         "id": 3,
         "power": "user",
-        "ten_dang_nhap": "user2",
+        "tendangnhap": "user2",
         "matkhau": "user2",
-        "ten_day_du":{"ten": "van b","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "dang lam"
+        "tendaydu":{"ten": "van b","ho":"nguyen"},
+        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "dang lam"
     },
     {
         "id": 4,
         "power": "user",
-        "ten_dang_nhap": "user3",
+        "tendangnhap": "user3",
         "matkhau": "user3",
-        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "da nghi"
+        "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "da nghi"
     },
     {
         "id": 5,
         "power": "user",
-        "ten_dang_nhap": "user4",
+        "tendangnhap": "user4",
         "matkhau": "user",
-        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "dang lam"
+        "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
+        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "dang lam"
     },
     {
         "id": 6,
         "power": "user",
-        "ten_dang_nhap": "user5",
+        "tendangnhap": "user5",
         "matkhau": "user5",
-        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "dang lam"
+        "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
+        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "dang lam"
     },
     {
         "id": 7,
         "power": "user",
-        "ten_dang_nhap": "user6",
+        "tendangnhap": "user6",
         "matkhau": "user6",
-        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "da nghi"
+        "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
+        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "da nghi"
     },
     {
         "id": 8,
         "power": "admin",
-        "ten_dang_nhap": "admin",
+        "tendangnhap": "admin",
         "matkhau": "admin",
-        "ten_day_du":{"ten": "hoai nam","ho":"nguyen"},
-        "ngay_duoc_tao": "12/4/2020 , 3:06:55 PM",
-        "trang_thai": "dang lam"
+        "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
+        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "trangthai": "dang lam"
     }
 ]

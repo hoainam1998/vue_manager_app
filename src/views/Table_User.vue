@@ -4,7 +4,7 @@
       <div>
         <h2>Danh sach nguoi dung</h2>
         <b-button variant="success">
-          <router-link :to="{name: 'create_user'}" class="create_user">
+          <router-link to="home/create_user" class="create_user">
             Tao nguoi dung</router-link
           >
         </b-button>
@@ -30,10 +30,10 @@
       :fields="fields"
       small
     >
-      <template #cell(ten_day_du)="data">
+      <template #cell(tendaydu)="data">
         {{ data.value.ho }} {{ data.value.ten }}
       </template>
-      <template #cell(thao_tac)="row">
+      <template #cell(thaotac)="row">
         <button class="update" @click="show(row.item)">
           <i class="fas fa-edit"></i>
         </button>
@@ -66,11 +66,11 @@ export default {
       currentPage: 1,
       fields: [
         { key: "id", thClass: "d-none", tdClass: "d-none" },
-        { key: "ten_day_du", label: "Tên Đầy Đủ" },
-        { key: "ten_dang_nhap", label: "Tên Đăng Nhập" },
-        { key: "ngay_duoc_tao", label: "Ngày Được Tạo" },
-        { key: "trang_thai", label: "Trạng Thái" },
-        { key: "thao_tac", label: "Thao Tác" },
+        { key: "tendaydu", label: "Tên Đầy Đủ" },
+        { key: "tendangnhap", label: "Tên Đăng Nhập" },
+        { key: "ngayduoctao", label: "Ngày Được Tạo" },
+        { key: "trangthai", label: "Trạng Thái" },
+        { key: "thaotac", label: "Thao Tác" },
       ],
       users: [],
     };
@@ -87,7 +87,7 @@ export default {
     ...mapActions("user", ["setUsers", "setSpecificUser", "searchUser"]),
     show(item) {
       this.setSpecificUser(item);
-      location.href = "#/home/create_user";
+      this.$router.push('home/create_user')
     },
 
     search() {
@@ -102,7 +102,6 @@ export default {
   },
   created() {
     this.users = this.$store.getters["user/getUsers"];
-    console.log(this.users);
   },
 };
 </script>

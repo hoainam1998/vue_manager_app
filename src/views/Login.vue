@@ -47,7 +47,7 @@ export default {
       let errs = [];
       let list_user_authen = this.$store.getters["user/getUsers"];
       const tendangnhap_exist = list_user_authen.findIndex(
-        (user) => user.ten_dang_nhap === this.user.tendangnhap
+        (user) => user.tendangnhap === this.user.tendangnhap
       );
       const matkhau_exist = list_user_authen.findIndex(
         (user) => user.matkhau === this.user.matkhau
@@ -59,7 +59,7 @@ export default {
       } else {
         let user_authen = list_user_authen.find(
           (user) =>
-            user.ten_dang_nhap === this.user.tendangnhap &&
+            user.tendangnhap === this.user.tendangnhap &&
             user.matkhau === this.user.matkhau
         );
         sessionStorage.setItem("user_authen", JSON.stringify(user_authen));
@@ -67,7 +67,7 @@ export default {
       if (errs.length > 0) {
         this.errs = errs;
       } else {
-        location.href = "#/home";
+        this.$router.push('/home')
       }
     },
   },

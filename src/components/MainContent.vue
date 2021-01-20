@@ -19,4 +19,11 @@ export default {
   flex-direction: column;
   padding: 0 15px;
 }
+
+a,
+a:hover {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
 </style>
