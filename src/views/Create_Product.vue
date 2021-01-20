@@ -9,6 +9,7 @@
             placeholder="Tao ten san pham"
             required
             v-model="product.tensanpham"
+            :disabled="disabled"
           ></b-form-input>
         </div>
         <div>
@@ -16,7 +17,7 @@
           <b-form-input
             placeholder="Nhap gia san pham"
             required
-            v-model="product.giasanpham"
+            v-model="product.gia"
           ></b-form-input>
         </div>
       </div>
@@ -26,18 +27,14 @@
           value="Hoat dong"
           unchecked-value="Ko hoat dong"
           v-model="product.trangthai"
-          :disabled="disabled"
         >
           Trang thai
         </b-form-checkbox>
       </div>
       <div class="group_button">
-        <b-button variant="success" class="mr-2" type="submit"> Tao </b-button>
+        <b-button variant="success" class="mr-2" type="submit"> {{disabled?'Cap nhap':'Tao'}} </b-button>
         <b-button variant="success">
-          <router-link :to="{ name: 'product_table' }"
-            >Huy</router-link
-          ></b-button
-        >
+          <router-link to="/home/product">Huy</router-link></b-button>
       </div>
     </form>
   </section>
@@ -51,7 +48,7 @@ export default {
     return {
       product: {
         tensanpham: "",
-        giasanpham: "",
+        gia: "",
         trangthai: "Ko hoat dong",
       },
       disabled: false,
@@ -59,46 +56,60 @@ export default {
     };
   },
   methods: {
-    ...mapActions("product", ["createProducts"]),
+    ...mapActions("product", ["createProducts", "updateProducts"]),
     createProduct() {
+      const product = {
+        id: v4(),
+        tensanpham: this.product.tensanpham,
+        ngaytao: this.getDate(),
+        ngaycapnhapganday: this.getDate(),
+        gia: parseInt(this.product.gia),
+        trangthai: this.product.trangthai,
+      };
+      console.log(product);
+      this.createProducts(product);
+    },
+
+    updateProduct() {
+      const updateProduct = {
+        id: this.product.id,
+        gia: parseInt(this.product.gia),
+        trangthai: this.product.trangthai,
+        ngaycapnhapganday: this.getDate(),
+      };
+      this.updateProducts(updateProduct);
+      this.$store.dispatch("product/setSpecificProduct", {});
+    },
+
+    handleSubmit() {
+      if (parseInt(this.product.gia).toString() === "NaN") {
+        this.err = "Gia san pham phai la so";
+      } else {
+        if (this.disabled === false) {
+          this.createProduct();
+        } else {
+          this.updateProduct();
+        }
+        this.$router.push("/home/product");
+      }
+    },
+
+    getDate() {
       let date = new Date();
       let day =
-        `${date.getDate()}/${date.getMonth()}/${date.getFullYear()},` +
+        `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()},` +
         `${date.toLocaleString("en-US", {
           hour: "numeric",
           minute: "numeric",
           second: "numeric",
           hour12: true,
         })}`;
-
-      if (parseInt(this.product.giasanpham).toString() === "NaN") {
-        this.err = "Gia san pham phai la so";
-      } else {
-        const product = {
-          id: v4(),
-          tensanpham: this.product.tensanpham,
-          ngaytao: day,
-          ngaycapnhapganday: day,
-          gia: parseInt(this.product.giasanpham),
-          trangthai: this.product.trangthai,
-        };
-
-        this.createProducts(product);
-        this.$router.push('/home/product')
-      }
-    },
-
-    updateProduct() {},
-
-    handleSubmit() {
-      if (this.disabled === false) {
-        this.createProduct();
-      }
+      return day;
     },
   },
   created() {
-    let product = this.$store.getters["product/setSpecificProduct"];
-    if (typeof product !== "undefined") {
+    let product = this.$store.getters["product/getSpecificProduct"];
+    if (typeof product.id !== "undefined") {
       this.disabled = true;
       this.product = product;
     }

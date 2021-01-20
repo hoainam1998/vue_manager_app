@@ -7,7 +7,7 @@
           <label class="title_form">Ten dang nhap</label>
           <b-form-input
             placeholder="Tao ten dang nhap"
-            v-model="newUser.ten_dang_nhap"
+            v-model="newUser.tendangnhap"
             required
             :disabled="disabled"
           ></b-form-input>
@@ -16,7 +16,7 @@
           <label class="title_form">Ten nhan vien</label>
           <b-form-input
             placeholder="Nhap ten"
-            v-model="newUser.ten_day_du.ten"
+            v-model="newUser.tendaydu.ten"
             required
           ></b-form-input>
         </div>
@@ -24,7 +24,7 @@
           <label class="title_form">Ho nhan vien</label>
           <b-form-input
             placeholder="Nhap ho"
-            v-model="newUser.ten_day_du.ho"
+            v-model="newUser.tendaydu.ho"
             required
           ></b-form-input>
         </div>
@@ -32,9 +32,9 @@
       <div class="my-2">
         <b-form-checkbox
           name="trangthai_checkbox"
-          value="dang lam"
-          unchecked-value="da nghi"
-          v-model="newUser.trang_thai"
+          value="Dang lam"
+          unchecked-value="Da nghi"
+          v-model="newUser.trangthai"
         >
           Trang thai
         </b-form-checkbox>
@@ -44,7 +44,7 @@
           disabled ? "Cap nhap" : "Tao"
         }}</b-button>
         <b-button variant="success">
-          <router-link :to="{ name: 'user_table' }">Huy</router-link></b-button
+          <router-link to="/home">Huy</router-link></b-button
         >
       </div>
     </form>
@@ -58,9 +58,9 @@ export default {
   data() {
     return {
       newUser: {
-        ten_day_du: { ho: "", ten: "" },
-        ten_dang_nhap: "",
-        trang_thai: "da nghi",
+        tendaydu: { ho: "", ten: "" },
+        tendangnhap: "",
+        trangthai: "Da nghi",
       },
       err: "",
       disabled: false,
@@ -71,7 +71,7 @@ export default {
     createUser() {
       let date = new Date();
       let day =
-        `${date.getDate()}/${date.getMonth()}/${date.getFullYear()},` +
+        `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()},` +
         `${date.toLocaleString("en-US", {
           hour: "numeric",
           minute: "numeric",
@@ -82,35 +82,32 @@ export default {
       const user_obj = {
         id: v4(),
         power: "user",
-        ten_dang_nhap: this.newUser.ten_dang_nhap,
+        tendangnhap: this.newUser.tendangnhap,
         matkhau: "matkhau",
-        ten_day_du: this.newUser.ten_day_du,
-        ngay_duoc_tao: day,
-        trang_thai: this.newUser.trang_thai,
+        tendaydu: this.newUser.tendaydu,
+        ngayduoctao: day,
+        trangthai: this.newUser.trangthai,
       };
 
       let index = this.$store.getters["user/getUsers"].findIndex(
-        (user) => user.ten_dang_nhap === user_obj.ten_dang_nhap
+        (user) => user.tendangnhap === user_obj.tendangnhap
       );
 
       if (index !== -1) {
         this.err = "Ten dang nhap da ton tai";
       } else {
         this.addListUsers(user_obj);
-        // location.href = "#/home";
-        this.$router.push('/home')
       }
     },
 
     updateUser(){
       const update_User={
         id: this.newUser.id,
-        ten_day_du: this.newUser.ten_day_du,
-        trang_thai: this.newUser.trang_thai
+        tendaydu: this.newUser.tendaydu,
+        trangthai: this.newUser.trangthai
       }
       this.updateListUsers(update_User);
-      // location.href = "#/home";
-      this.$router.push('/home')
+      this.$store.dispatch('user/setSpecificUser',{})
     },
 
     handleSubmit() {
@@ -119,6 +116,7 @@ export default {
       }else {
         this.updateUser()
       }
+      this.$router.push('/home')
     },
   },
   created() {
@@ -161,10 +159,4 @@ export default {
   width: 150px;
 }
 
-a,
-a:hover {
-  color: white;
-  text-decoration: none;
-  display: block;
-}
 </style>

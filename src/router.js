@@ -49,11 +49,11 @@ export default new Router({
                             component: Table_Product
                         },
                         {
+                            name: "create_product",
                             path: "create_product",
                             component: Create_Product
                         }
                     ]
-
                 }
             ]
         }
