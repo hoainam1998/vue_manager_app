@@ -3,12 +3,12 @@
     <div class="manipulation">
       <div>
         <h2>Danh sach san pham</h2>
-        <b-button variant="success">
+        <b-button variant="success" v-if="is_show">
           <router-link to="product/create_product">Tao san pham</router-link>
         </b-button>
       </div>
       <div class="mb-3">
-        <input type="number" class="form-control" v-model="perPage" />
+        <b-form-select :options="options" v-model="perPage"></b-form-select>
         <form @submit.prevent="search()">
           <b-input-group prepend="Ten san pham" class="mt-3">
             <b-form-input id="search"></b-form-input>
@@ -29,7 +29,7 @@
         :items="products"
         :per-page="perPage"
         :current-page="currentPage"
-        :fields="fields"
+        :fields="fields_visible"
       >
         <template #cell(gia)="data">
           {{
@@ -68,9 +68,10 @@ export default {
   name: "Table_Product",
   data() {
     return {
-      perPage: 2,
+      perPage: 20,
       currentPage: 1,
       products: [],
+      options:[{value:20,text: "20"},{value:50,text: "50"},{value:100,text: "100"}],
       fields: [
         { key: "id", thClass: "d-none", tdClass: "d-none" },
         { key: "tensanpham", label: "Tên Sản Phẩm" },
@@ -86,24 +87,34 @@ export default {
     rows() {
       return this.products.length;
     },
-    totalPage(){
-        return Math.ceil(this.products.length/this.perPage)
+    totalPage() {
+      return Math.ceil(this.products.length / this.perPage);
+    },
+    fields_visible() {
+      let user = JSON.parse(sessionStorage.getItem("user_authen"));
+      if (!user.admin) {
+        return this.fields.filter((item) => item.key !== "thaotac");
+      }
+      return this.fields;
+    },
+    is_show(){
+      let user = JSON.parse(sessionStorage.getItem("user_authen"));
+      return user.admin
     }
   },
   methods: {
     show(item) {
-      this.$store.dispatch('product/setSpecificProduct',item);
-      this.$router.push('product/create_product')
+      this.$store.dispatch("product/setSpecificProduct", item);
+      this.$router.push("product/create_product");
     },
-    search(){
-        let value_search=document.querySelector('#search').value;
-        this.$store.dispatch('product/search',value_search)
-        this.products=this.$store.getters['product/getListProductSearch'];
+    search() {
+      let value_search = document.querySelector("#search").value;
+      this.$store.dispatch("product/search", value_search);
+      this.products = this.$store.getters["product/getListProductSearch"];
     },
-    reset(){
-        this.products=this.$store.getters['product/getProducts'];
+    reset() {
+      this.products = this.$store.getters["product/getProducts"];
     },
-
   },
   async created() {
     this.products = this.$store.getters["product/getProducts"];
@@ -116,9 +127,8 @@ export default {
   justify-content: space-between;
 }
 
-input[type="number"] {
+.custom-select {
   width: 100px;
-  height: 35px;
 }
 
 a,

@@ -10,7 +10,7 @@ export default {
   name: 'App',
   methods:{
     ...mapActions('user',['setUsers']),
-    ...mapActions('product',['setProducts'])
+    ...mapActions('product',['setProducts']),
   },
   async created(){
     await this.setUsers();

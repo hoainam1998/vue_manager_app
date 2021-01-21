@@ -10,7 +10,7 @@
         </b-button>
       </div>
       <div class="mb-3">
-        <input type="number" class="form-control" v-model="perPage" />
+        <b-form-select :options="options" v-model="perPage"></b-form-select>
         <form @submit.prevent="search()">
           <b-input-group prepend="Ten day du" class="mt-3">
             <b-form-input id="search"></b-form-input>
@@ -62,8 +62,9 @@ export default {
   name: "Table_User",
   data() {
     return {
-      perPage: 5,
+      perPage: 20,
       currentPage: 1,
+      options:[{value: 20, text: "20"},{value: 50, text: "50"},{value: 100, text: "100"}],
       fields: [
         { key: "id", thClass: "d-none", tdClass: "d-none" },
         { key: "tendaydu", label: "Tên Đầy Đủ" },
@@ -111,18 +112,7 @@ export default {
   justify-content: space-between;
 }
 
-.create_user {
-  display: block;
-  width: 150px;
-  border: none;
-  outline: none;
-  border-radius: 4px;
-  color: white;
-  text-decoration: none;
-}
-
-input[type="number"] {
+.custom-select {
   width: 100px;
-  height: 35px;
 }
 </style>
