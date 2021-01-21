@@ -35,7 +35,6 @@ const router = new Router({
                     path: '',
                     component: User,
                     name: "user",
-                    meta: { is_admin: true },
                     beforeEnter(to, from, next) {
                         let user = JSON.parse(sessionStorage.getItem('user_authen'))
                         try {
@@ -116,6 +115,19 @@ router.beforeEach((to, from, next) => {
     if (to.matched.length === 0) {
         next('/404')
     } else {
+        next()
+    }
+})
+
+router.beforeEach((to,from,next)=>{
+    if(to.matched.some(record=>record.meta.requiresAuth)){
+        let user = JSON.parse(sessionStorage.getItem('user_authen'))
+        if(user){
+            next()
+        }else {
+            next('/')
+        }
+    }else {
         next()
     }
 })

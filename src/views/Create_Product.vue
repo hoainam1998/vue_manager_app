@@ -69,7 +69,6 @@ export default {
         gia: parseInt(this.product.gia),
         trangthai: this.product.trangthai,
       };
-      console.log(product);
       this.createProducts(product);
     },
 
@@ -85,7 +84,6 @@ export default {
     },
 
     handleSubmit() {
-      console.log(this.check_isNumber(this.product.gia))
       if (this.check_isNumber(this.product.gia)) {
         if (this.disabled === false) {
           this.createProduct();
@@ -111,11 +109,13 @@ export default {
       return day;
     },
     check_isNumber(gia) {
-      console.log(typeof gia)
-      if (typeof gia === "number") {
-        return true;
+      gia = gia.toString();
+      for (let char of gia) {
+        if (parseInt(char).toString() === "NaN") {
+          return false;
+        }
       }
-      return false;
+      return true;
     },
   },
   created() {

@@ -46,7 +46,7 @@ export default {
   width: 100%;
   background: white;
   border-radius: 4px;
-  margin-bottom: 15px;
+  margin: 12px 0;
   position: relative;
 }
 

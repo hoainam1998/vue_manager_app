@@ -1,7 +1,12 @@
 <template>
-  <main class="content">
+  <main>
     <div class="background"></div>
-    <h1>404 page not found</h1>
+    <div class="content">
+      <h1>404 page not found</h1>
+      <b-button variant="danger"
+        ><router-link to="/">Home</router-link></b-button
+      >
+    </div>
   </main>
 </template>
 <script>
@@ -10,29 +15,33 @@ export default {
 };
 </script>
 <style scoped>
-.content {
+main {
   height: 100vh;
   position: relative;
-
 }
 
 .background {
-  background: url('../assets/pexels-photo-814499.jpeg') no-repeat;
+  background: url("../assets/pexels-photo-814499.jpeg") no-repeat;
   background-size: cover;
   filter: blur(8px);
   height: 100%;
 }
 
-.content h1{
-  color: #e74c3c;
-  font-size: 100px;
-  text-align: center;
+.content {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  text-transform: uppercase;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2;
   width: 80%;
-  border: 4px solid  #e74c3c;
+  border: 4px solid #e74c3c;
+  background: transparent;
+  text-align: center;
+}
+
+.content h1 {
+  color: #e74c3c;
+  font-size: 100px;
+  text-transform: uppercase;
 }
 </style>
