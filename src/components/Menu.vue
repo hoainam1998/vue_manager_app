@@ -45,7 +45,7 @@ export default {
 }
 
 .menu {
-  height: 100vh;
+  height: 100%;
   background: var(--maincolor);
   padding: 2rem 0;
 }
