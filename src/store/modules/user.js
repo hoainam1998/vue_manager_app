@@ -13,8 +13,10 @@ const getters = {
 
 const actions = {
     async setUsers({ commit }) {
-        let res = await axios.get('./user.json');
+        try{
+            let res = await axios.get('./user.json');
         commit('setUsers', res.data)
+        }catch(e){console.log(e.message)}
     },
 
     addListUsers({ commit }, user) {

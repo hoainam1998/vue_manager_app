@@ -32,9 +32,12 @@
         </b-form-checkbox>
       </div>
       <div class="group_button">
-        <b-button variant="success" class="mr-2" type="submit"> {{disabled?'Cap nhap':'Tao'}} </b-button>
+        <b-button variant="success" class="mr-2" type="submit">
+          {{ disabled ? "Cap nhap" : "Tao" }}
+        </b-button>
         <b-button variant="success">
-          <router-link to="/home/product">Huy</router-link></b-button>
+          <router-link to="/home/product">Huy</router-link></b-button
+        >
       </div>
     </form>
   </section>
@@ -82,22 +85,23 @@ export default {
     },
 
     handleSubmit() {
-      if (parseInt(this.product.gia).toString() === "NaN") {
-        this.err = "Gia san pham phai la so";
-      } else {
+      console.log(this.check_isNumber(this.product.gia))
+      if (this.check_isNumber(this.product.gia)) {
         if (this.disabled === false) {
           this.createProduct();
         } else {
           this.updateProduct();
         }
         this.$router.push("/home/product");
+      }else {
+        this.err="Gia san pham phai la so!"
       }
     },
 
     getDate() {
       let date = new Date();
       let day =
-        `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()},` +
+        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()},` +
         `${date.toLocaleString("en-US", {
           hour: "numeric",
           minute: "numeric",
@@ -105,6 +109,13 @@ export default {
           hour12: true,
         })}`;
       return day;
+    },
+    check_isNumber(gia) {
+      console.log(typeof gia)
+      if (typeof gia === "number") {
+        return true;
+      }
+      return false;
     },
   },
   created() {
@@ -138,5 +149,9 @@ a:hover {
   color: white;
   text-decoration: none;
   display: block;
+}
+
+.btn-success {
+  padding: 0;
 }
 </style>

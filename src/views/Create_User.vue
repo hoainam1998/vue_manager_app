@@ -159,4 +159,7 @@ export default {
   width: 150px;
 }
 
+.btn-success {
+  padding: 0;
+}
 </style>

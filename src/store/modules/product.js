@@ -13,8 +13,10 @@ const getters = {
 
 const actions = {
     async setProducts({ commit }) {
-        let res = await axios.get('./product.json')
+        try{
+            let res = await axios.get('./product.json')
         commit('setProducts', res.data)
+        }catch(err){console.log(err.message)}
     },
 
     setSpecificProduct({ commit }, product) {
@@ -26,7 +28,6 @@ const actions = {
     },
 
     updateProducts({ commit }, product) {
-        //id,tensanpham,ngaytao,ngaycapnhapganday,gai,trangthai
         commit('updateProducts',product)
     },
 

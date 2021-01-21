@@ -8,15 +8,22 @@ import User from './views/User_board'
 import Product from './views/Product_board'
 import Table_Product from './views/Table_Product'
 import Create_Product from './views/Create_Product'
+import PageNotFound from './views/404'
 Vue.use(Router)
 
 const router = new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
             name: 'login',
             component: Login,
             meta: { guest: true },
+        },
+        {
+            path: "/404",
+            name: "404",
+            component: PageNotFound,
         },
         {
             path: '/home',
@@ -28,7 +35,21 @@ const router = new Router({
                     path: '',
                     component: User,
                     name: "user",
-                    meta: { requiresAuth: true, is_admin: true},
+                    meta: { is_admin: true },
+                    beforeEnter(to, from, next) {
+                        let user = JSON.parse(sessionStorage.getItem('user_authen'))
+                        try {
+                            if (user.admin === false && to.path.includes('user')) {
+                                next('/404')
+                                return;
+                            }
+                            if (user.admin) {
+                                next()
+                            } else {
+                                router.push('home/product')
+                            }
+                        } catch (err) { console.log(err.message) }
+                    },
                     children: [
                         {
                             path: '',
@@ -38,7 +59,7 @@ const router = new Router({
                         {
                             path: 'create_user',
                             name: 'create_user',
-                            component: Create_user
+                            component: Create_user,
                         }
                     ]
                 },
@@ -46,19 +67,26 @@ const router = new Router({
                     path: 'product',
                     name: 'product',
                     component: Product,
-                    meta: { requiresAuth: true },
                     children: [
                         {
                             path: '',
                             name: "product_table",
                             component: Table_Product,
-                            meta: {requiresAuth:true}
                         },
                         {
                             name: "create_product",
                             path: "create_product",
                             component: Create_Product,
-                            meta:{requiresAuth:true}
+                            beforeEnter(to, from, next) {
+                                let user = JSON.parse(sessionStorage.getItem('user_authen'))
+                                try {
+                                    if (!user.admin){
+                                        next('/404')
+                                        return
+                                    }
+                                } catch (err) { console.log(err.message) }
+                                next()
+                            },
                         }
                     ]
                 }
@@ -67,41 +95,30 @@ const router = new Router({
     ]
 })
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some((record) => record.meta.requiresAuth)) {
-        console.log('au')
-        let user_auth = JSON.parse(sessionStorage.getItem('user_authen'));
-        if (user_auth !== null) {
-            if (to.matched.some((record) => record.meta.is_admin)) {
-                if (user_auth.admin === true) {
-                    next()
-                }
-                else {
-                    console.log(to)
-                    next('home/product')
-                }
+router.beforeEach((to, form, next) => {
+    if (to.matched.some(record => record.meta.guest)) {
+        let user = JSON.parse(sessionStorage.getItem('user_authen'))
+        if (user) {
+            if (user.admin) {
+                next('/home')
             } else {
-                next()
+                next('home/product')
             }
         } else {
-            next('/')
+            next()
         }
-    } else if(to.matched.some((record) => record.meta.guest)){
+    } else {
         next()
     }
-});
+})
 
-// router.beforeEach((to, from, next) => {
-//     if (to.matched.some((record) => record.meta.guest)) {
-//         let user_auth = sessionStorage.getItem('user_authen')
-//         if (user_auth !== null) {
-//             next()
-//             return;
-//         } else { next() }
-//     } else {
-//         next()
-//     }
-
-// });
+router.beforeEach((to, from, next) => {
+    if (to.matched.length === 0) {
+        next('/404')
+    } else {
+        next()
+    }
+})
 
 export default router;
+

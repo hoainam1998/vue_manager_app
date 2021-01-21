@@ -50,7 +50,7 @@
         "tendangnhap": "user5",
         "matkhau": "user5",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
-        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
         "trangthai": "dang lam"
     },
     {
@@ -59,7 +59,7 @@
         "tendangnhap": "user6",
         "matkhau": "user6",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
-        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
         "trangthai": "da nghi"
     },
     {
@@ -68,7 +68,7 @@
         "tendangnhap": "user8",
         "matkhau": "user8",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
-        "ngayduoc_tao": "12/4/2020 , 3:06:55 PM",
+        "ngayduoctao": "12/4/2020 , 3:06:55 PM",
         "trangthai": "dang lam"
     }
 ]
