@@ -5,20 +5,11 @@
       <div class="layout_form">
         <div>
           <label class="title_form">Ten san pham</label>
-          <b-form-input
-            placeholder="Tao ten san pham"
-            required
-            v-model="product.tensanpham"
-            :disabled="disabled"
-          ></b-form-input>
+         <input class="form-control" type="text" id="ten" :disabled="disabled" placeholder="Nhap ten san pham"/>
         </div>
         <div>
           <label class="title_form">Gia san pham</label>
-          <b-form-input
-            placeholder="Nhap gia san pham"
-            required
-            v-model="product.gia"
-          ></b-form-input>
+          <input class="form-control" type="text" id="gia" placeholder="Nhap gia san pham"/>
         </div>
       </div>
       <div class="my-2">
@@ -36,8 +27,8 @@
           {{ disabled ? "Cap nhap" : "Tao" }}
         </b-button>
         <b-button variant="success">
-          <router-link to="/home/product">Huy</router-link></b-button
-        >
+          <router-link to="/home/product"> Huy</router-link> 
+        </b-button>
       </div>
     </form>
   </section>
@@ -50,6 +41,7 @@ export default {
   data() {
     return {
       product: {
+        id: "",
         tensanpham: "",
         gia: "",
         trangthai: "Ko hoat dong",
@@ -84,6 +76,8 @@ export default {
     },
 
     handleSubmit() {
+      this.product.gia=document.querySelector('#gia').value;
+      this.product.tensanpham=document.querySelector('#ten').value;
       if (this.check_isNumber(this.product.gia)) {
         if (this.disabled === false) {
           this.createProduct();
@@ -91,11 +85,10 @@ export default {
           this.updateProduct();
         }
         this.$router.push("/home/product");
-      }else {
-        this.err="Gia san pham phai la so!"
+      } else {
+        this.err = "Gia san pham phai la so!";
       }
     },
-
     getDate() {
       let date = new Date();
       let day =
@@ -118,12 +111,18 @@ export default {
       return true;
     },
   },
-  created() {
+  mounted(){
     let product = this.$store.getters["product/getSpecificProduct"];
     if (typeof product.id !== "undefined") {
       this.disabled = true;
-      this.product = product;
+      document.querySelector('#ten').value=product.tensanpham;
+      document.querySelector('#gia').value=product.gia;
+      this.product.trangthai=product.trangthai;
+      this.product.id=product.id;
     }
+  },
+  beforeDestroy() {
+    this.$store.dispatch("product/setSpecificProduct", {});
   },
 };
 </script>

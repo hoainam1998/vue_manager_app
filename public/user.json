@@ -6,7 +6,7 @@
         "matkhau": "hoainam1999",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "dang lam"
+        "trangthai": "Dang lam"
     },
     {
         "id": 2,
@@ -15,7 +15,7 @@
         "matkhau": "user1",
         "tendaydu":{"ten": "van a","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "da nghi"
+        "trangthai": "Da nghi"
     },
     {
         "id": 3,
@@ -24,7 +24,7 @@
         "matkhau": "user2",
         "tendaydu":{"ten": "van b","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "dang lam"
+        "trangthai": "Dang lam"
     },
     {
         "id": 4,
@@ -33,7 +33,7 @@
         "matkhau": "user3",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "da nghi"
+        "trangthai": "Da nghi"
     },
     {
         "id": 5,
@@ -42,7 +42,7 @@
         "matkhau": "user",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "dang lam"
+        "trangthai": "Dang lam"
     },
     {
         "id": 6,
@@ -51,7 +51,7 @@
         "matkhau": "user5",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "dang lam"
+        "trangthai": "Dang lam"
     },
     {
         "id": 7,
@@ -60,7 +60,7 @@
         "matkhau": "user6",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "da nghi"
+        "trangthai": "Dang lam"
     },
     {
         "id": 8,
@@ -69,6 +69,6 @@
         "matkhau": "user8",
         "tendaydu":{"ten": "hoai nam","ho":"nguyen"},
         "ngayduoctao": "12/4/2020 , 3:06:55 PM",
-        "trangthai": "dang lam"
+        "trangthai": "Dang lam"
     }
 ]
