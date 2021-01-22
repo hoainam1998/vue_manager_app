@@ -13,18 +13,18 @@ const getters = {
 
 const actions = {
     async setUsers({ commit }) {
-        try{
+        try {
             let res = await axios.get('./user.json');
-        commit('setUsers', res.data)
-        }catch(e){console.log(e.message)}
+            commit('setUsers', res.data)
+        } catch (err) { console.log(err.message) }
     },
 
     addListUsers({ commit }, user) {
+        console.log('add list users ')
         commit('addListUser', user)
     },
 
     updateListUsers({ commit }, user) {
-
         commit('updateListUsers', user)
     },
 
@@ -42,8 +42,8 @@ const mutations = {
 
     addListUser: (state, user) => (state.users.unshift(user)),
 
-    updateListUsers: (state, user) => (
-        state.users.map(us => us.id === user.id ? { 
+    updateListUsers: (state, user) => {
+        state.users=state.users.map(us => us.id === user.id ? {
             id: us.id,
             power: us.power,
             tendangnhap: us.tendangnhap,
@@ -51,16 +51,18 @@ const mutations = {
             tendaydu: user.tendaydu,
             ngayduoctao: us.ngayduoctao,
             trangthai: user.trangthai
-         } : us)
-    ),
+        } : us)
+    },
+    
     setSpecificUser: (state, user) => (state.specificUser = user),
 
     searchUser: (state, value_search) => {
+        let listSearch=[]
         state.users.forEach(function (user) {
-            let ten = user.tendaydu.ho + " " + user.tendaydu.ten;
-            if (ten.toLowerCase().includes(value_search.toLowerCase())) {
-                state.listUserSearched.push(user);
+            if (user.tendaydu.ten.toLowerCase().includes(value_search.toLowerCase())) {
+               listSearch.push(user);         
             }
+            state.listUserSearched=listSearch;
         })
     }
 }

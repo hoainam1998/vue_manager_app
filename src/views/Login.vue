@@ -69,13 +69,13 @@ export default {
             user.matkhau === this.user.matkhau
         );
         sessionStorage.setItem("user_authen", JSON.stringify(user_authen));
-        this.$router.push('home')
+        this.$router.push(this.$route.query.redirect || '/home')
       }
     },
   },
   async created(){
-     await this.setUsers();
-  }
+     await this.setUsers()
+  },
 };
 </script>
 

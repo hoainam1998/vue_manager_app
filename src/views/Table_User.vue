@@ -4,7 +4,7 @@
       <div>
         <h2>Danh sach nguoi dung</h2>
         <b-button variant="success">
-          <router-link to="home/create_user" class="create_user">
+          <router-link to="home/create_user">
             Tao nguoi dung</router-link
           >
         </b-button>

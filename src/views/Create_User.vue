@@ -1,32 +1,26 @@
 <template>
   <section class="content">
     <b-alert show variant="danger" v-if="err">{{ err }}</b-alert>
+    <!-- @submit.prevent="handleSubmit" -->
     <form id="create_user" @submit.prevent="handleSubmit">
       <div class="layout_form">
         <div>
-          <label class="title_form">Ten dang nhap</label>
-          <b-form-input
-            placeholder="Tao ten dang nhap"
-            v-model="newUser.tendangnhap"
-            required
+          <label class="title_form" ID>Ten dang nhap</label>
+          <input
+            type="text"
+            class="form-control"
             :disabled="disabled"
-          ></b-form-input>
+            placeholder="Tao ten nhap"
+            id="tendangnhap"
+          />
         </div>
         <div>
           <label class="title_form">Ten nhan vien</label>
-          <b-form-input
-            placeholder="Nhap ten"
-            v-model="newUser.tendaydu.ten"
-            required
-          ></b-form-input>
+          <input type="text" class="form-control" placeholder="Nhap ho" id="ten" />
         </div>
         <div>
           <label class="title_form">Ho nhan vien</label>
-          <b-form-input
-            placeholder="Nhap ho"
-            v-model="newUser.tendaydu.ho"
-            required
-          ></b-form-input>
+          <input type="text" class="form-control" placeholder="Nhap ten" id="ho"/>
         </div>
       </div>
       <div class="my-2">
@@ -34,7 +28,7 @@
           name="trangthai_checkbox"
           value="Dang lam"
           unchecked-value="Da nghi"
-          v-model="newUser.trangthai"
+          v-model="defaultUser.trangthai"
         >
           Trang thai
         </b-form-checkbox>
@@ -43,8 +37,8 @@
         <b-button variant="success" class="mr-2" type="submit">{{
           disabled ? "Cap nhap" : "Tao"
         }}</b-button>
-        <b-button variant="success">
-          <router-link to="/home">Huy</router-link></b-button
+        <b-button variant="success"
+          ><router-link to="/home">Huy</router-link></b-button
         >
       </div>
     </form>
@@ -57,36 +51,37 @@ export default {
   name: "create_user",
   data() {
     return {
-      newUser: {
-        tendaydu: { ho: "", ten: "" },
-        tendangnhap: "",
-        trangthai: "Da nghi",
-      },
       err: "",
       disabled: false,
+      defaultUser:{
+        id: "",
+        trangthai: "Da nghi",
+        tendangnhap: "",
+        tendaydu: {ten: "",ho: ""},
+      }
     };
   },
   methods: {
-    ...mapActions("user", ["addListUsers","updateListUsers"]),
+    ...mapActions("user", ["addListUsers", "updateListUsers"]),
     createUser() {
       let date = new Date();
       let day =
-        `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()},` +
+        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()},` +
         `${date.toLocaleString("en-US", {
           hour: "numeric",
           minute: "numeric",
           second: "numeric",
           hour12: true,
         })}`;
-        
+
       const user_obj = {
         id: v4(),
         power: "user",
-        tendangnhap: this.newUser.tendangnhap,
+        tendangnhap: this.defaultUser.tendangnhap,
         matkhau: "matkhau",
-        tendaydu: this.newUser.tendaydu,
+        tendaydu: this.defaultUser.tendaydu,
         ngayduoctao: day,
-        trangthai: this.newUser.trangthai,
+        trangthai: this.defaultUser.trangthai,
       };
 
       let index = this.$store.getters["user/getUsers"].findIndex(
@@ -100,36 +95,48 @@ export default {
       }
     },
 
-    updateUser(){
-      const update_User={
-        id: this.newUser.id,
-        tendaydu: this.newUser.tendaydu,
-        trangthai: this.newUser.trangthai
-      }
+    updateUser() {
+      const update_User = {
+        id: this.defaultUser.id,
+        tendaydu: this.defaultUser.tendaydu,
+        trangthai: this.defaultUser.trangthai,
+      };
       this.updateListUsers(update_User);
-      this.$store.dispatch('user/setSpecificUser',{})
     },
 
     handleSubmit() {
+        this.defaultUser.tendangnhap= document.querySelector('#tendangnhap').value,
+        this.defaultUser.tendaydu={
+          ten: document.querySelector('#ten').value,
+          ho: document.querySelector('#ho').value,
+        }
+        console.log(this.defaultUser)
+
       if (this.disabled === false) {
+        console.log("create");
         this.createUser();
-      }else {
-        this.updateUser()
+      } else {
+        console.log("update");
+        this.updateUser();
       }
-      this.$router.push('/home')
+      this.$router.push("/home");
     },
   },
-  created() {
+  mounted() {
     let user_toUpdate = this.$store.getters["user/getSpecificUser"];
     if (user_toUpdate.id) {
-      this.newUser = user_toUpdate;
+      document.querySelector('#tendangnhap').value=user_toUpdate.tendangnhap;
+      document.querySelector('#ho').value=user_toUpdate.tendaydu.ho;
+      document.querySelector("#ten").value=user_toUpdate.tendaydu.ten
+      this.defaultUser.trangthai=user_toUpdate.trangthai
+      this.defaultUser.id=user_toUpdate.id;
+
       this.disabled = true;
     }
   },
-  beforeDestroy(){
-    this.$store.dispatch('user/setSpecificUser',{});
-    console.log(this.$store.getters['user/getSpecificUser']);
-  }
+  beforeDestroy() {
+    this.$store.dispatch("user/setSpecificUser", {});
+  },
 };
 </script>
 <style scoped>

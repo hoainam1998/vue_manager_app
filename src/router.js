@@ -19,6 +19,10 @@ const router = new Router({
             name: 'login',
             component: Login,
             meta: { guest: true },
+            // beforeEnter(to,from,next){
+            //     console.log('user')
+            //     next()
+            // }
         },
         {
             path: "/404",
@@ -79,7 +83,7 @@ const router = new Router({
                             beforeEnter(to, from, next) {
                                 let user = JSON.parse(sessionStorage.getItem('user_authen'))
                                 try {
-                                    if (!user.admin){
+                                    if (!user.admin) {
                                         next('/404')
                                         return
                                     }
@@ -94,15 +98,31 @@ const router = new Router({
     ]
 })
 
-router.beforeEach((to, form, next) => {
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        let user = JSON.parse(sessionStorage.getItem('user_authen'))
+        if (!user) {
+            next({
+                path: "/",
+                query: { redirect: to.fullPath }
+            });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+
+router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.guest)) {
+        let path = localStorage.getItem('path') || '/home'
+        console.log(path)
         let user = JSON.parse(sessionStorage.getItem('user_authen'))
         if (user) {
-            if (user.admin) {
-                next('/home')
-            } else {
-                next('home/product')
-            }
+            
+            next(`${path}`);
+            localStorage.removeItem('path')
         } else {
             next()
         }
@@ -111,23 +131,16 @@ router.beforeEach((to, form, next) => {
     }
 })
 
+router.afterEach(to => {
+    if (!to.fullPath.includes('404')) {
+        localStorage.setItem('path', to.fullPath);
+    }
+})
+
 router.beforeEach((to, from, next) => {
     if (to.matched.length === 0) {
         next('/404')
     } else {
-        next()
-    }
-})
-
-router.beforeEach((to,from,next)=>{
-    if(to.matched.some(record=>record.meta.requiresAuth)){
-        let user = JSON.parse(sessionStorage.getItem('user_authen'))
-        if(user){
-            next()
-        }else {
-            next('/')
-        }
-    }else {
         next()
     }
 })

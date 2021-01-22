@@ -45,7 +45,7 @@ export default {
 }
 
 .menu {
-  height: 100%;
+  min-height: 100vh;
   background: var(--maincolor);
   padding: 2rem 0;
 }
@@ -74,6 +74,7 @@ export default {
 .fa-caret-down {
   float: right;
 }
+
 .sub_list a {
   color: white;
   text-decoration: none;
