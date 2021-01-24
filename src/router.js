@@ -19,15 +19,12 @@ const router = new Router({
             name: 'login',
             component: Login,
             meta: { guest: true },
-            // beforeEnter(to,from,next){
-            //     console.log('user')
-            //     next()
-            // }
         },
         {
             path: "/404",
             name: "404",
             component: PageNotFound,
+            meta: { guest: true }
         },
         {
             path: '/home',
@@ -36,33 +33,23 @@ const router = new Router({
             meta: { requiresAuth: true },
             children: [
                 {
-                    path: '',
+                    path: 'user',
                     component: User,
                     name: "user",
-                    beforeEnter(to, from, next) {
-                        let user = JSON.parse(sessionStorage.getItem('user_authen'))
-                        try {
-                            if (user.admin === false && to.path.includes('user')) {
-                                next('/404')
-                                return;
-                            }
-                            if (user.admin) {
-                                next()
-                            } else {
-                                router.push('home/product')
-                            }
-                        } catch (err) { console.log(err.message) }
-                    },
+                    meta: { requiresAuth: true },
                     children: [
                         {
                             path: '',
                             name: 'user_table',
                             component: Table_User,
+                            meta: { requiresAuth: true, is_admin: true }
                         },
                         {
                             path: 'create_user',
                             name: 'create_user',
                             component: Create_user,
+                            meta: { requiresAuth: true, is_admin: true },
+
                         }
                     ]
                 },
@@ -75,21 +62,13 @@ const router = new Router({
                             path: '',
                             name: "product_table",
                             component: Table_Product,
+                            meta: { requiresAuth: true }
                         },
                         {
                             name: "create_product",
                             path: "create_product",
                             component: Create_Product,
-                            beforeEnter(to, from, next) {
-                                let user = JSON.parse(sessionStorage.getItem('user_authen'))
-                                try {
-                                    if (!user.admin) {
-                                        next('/404')
-                                        return
-                                    }
-                                } catch (err) { console.log(err.message) }
-                                next()
-                            },
+                            meta: { requiresAuth: true, is_admin: true },
                         }
                     ]
                 }
@@ -99,49 +78,56 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+    let user = JSON.parse(sessionStorage.getItem('user_authen'))
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        let user = JSON.parse(sessionStorage.getItem('user_authen'))
-        if (!user) {
-            next({
-                path: "/",
-                query: { redirect: to.fullPath }
-            });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
-
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.guest)) {
-        let path = localStorage.getItem('path') || '/home'
-        console.log(path)
-        let user = JSON.parse(sessionStorage.getItem('user_authen'))
         if (user) {
-            
-            next(`${path}`);
-            localStorage.removeItem('path')
-        } else {
             next()
+            console.log(to.fullPath + ' home')
+        } else {
+            console.log('not user')
+            next({ path: '/', query: { redirect: to.fullPath } })
         }
-    } else {
+
+        if (user) {
+            if (user.admin) {
+                next('home/user')
+            } else {
+                console.log(to.fullPath + ' product')
+                next('home/product')
+            }
+        }
+
+        if (user) {
+            if (!user.admin && to.meta.is_admin) {
+                console.log('404')
+                next('/404')
+            }
+        }
+
+    } else if (to.matched.some(record => record.meta.guest)) {
         next()
+        console.log('login')
+        if (user) {
+            console.log(to);
+            let path = localStorage.getItem('path');
+            console.log(path)
+            if (user.admin && path) {
+                console.log('user admin')
+                next(path)
+            } else if (!user.admin && path === '/home/product') {
+                console.log('pass')
+                next(path)
+            } else {
+                next('/404')
+                localStorage.setItem('path', '/home/product')
+            }
+        }
     }
 })
 
 router.afterEach(to => {
-    if (!to.fullPath.includes('404')) {
-        localStorage.setItem('path', to.fullPath);
-    }
-})
-
-router.beforeEach((to, from, next) => {
-    if (to.matched.length === 0) {
-        next('/404')
-    } else {
-        next()
+    if (to.name !== '404' && to.name !== 'login') {
+        localStorage.setItem('path', to.fullPath)
     }
 })
 

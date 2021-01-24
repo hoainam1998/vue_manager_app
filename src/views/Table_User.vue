@@ -4,7 +4,7 @@
       <div>
         <h2>Danh sach nguoi dung</h2>
         <b-button variant="success">
-          <router-link to="home/create_user">
+          <router-link to="user/create_user">
             Tao nguoi dung</router-link
           >
         </b-button>
@@ -88,7 +88,7 @@ export default {
     ...mapActions("user", ["setUsers", "setSpecificUser", "searchUser"]),
     show(item) {
       this.setSpecificUser(item);
-      this.$router.push('home/create_user')
+      this.$router.push('user/create_user')
     },
 
     search() {
