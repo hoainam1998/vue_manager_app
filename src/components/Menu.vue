@@ -5,7 +5,7 @@
       <li>
         <span >Cai dat<i class="fas fa-caret-down"></i></span>
         <ul class="sub_list">
-          <li v-if="show"><router-link to="/home" >Nguoi dung</router-link></li>
+          <li v-if="show"><router-link to="/home/user" >Nguoi dung</router-link></li>
           <li><router-link to="/home/product" >San pham</router-link></li>
         </ul>
       </li>
