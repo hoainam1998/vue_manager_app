@@ -76,6 +76,15 @@ export default {
   async created(){
      await this.setUsers()
   },
+  beforeRouteEnter(to,from,next){
+    let user=JSON.parse(sessionStorage.getItem('user_authen'));
+    let path=localStorage.getItem('path')
+    if(user && path){
+      next(path)
+    }else {
+      next()
+    }
+  }
 };
 </script>
 

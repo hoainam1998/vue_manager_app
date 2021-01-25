@@ -3,8 +3,8 @@
     <div class="background"></div>
     <div class="content">
       <h1>404 page not found</h1>
-      <b-button variant="danger"
-        ><router-link to="/">Home</router-link></b-button
+      <router-link type="button" class="btn btn-primary" to="/home"
+        >Home</router-link
       >
     </div>
   </main>
