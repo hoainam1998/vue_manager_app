@@ -10,17 +10,17 @@
             type="text"
             class="form-control"
             :disabled="disabled"
-            placeholder="Tao ten nhap"
+            placeholder="Tao ten dang nhap"
             id="tendangnhap"
           />
         </div>
         <div>
           <label class="title_form">Ten nhan vien</label>
-          <input type="text" class="form-control" placeholder="Nhap ho" id="ten" />
+          <input type="text" class="form-control" placeholder="Nhap ten" id="ten" />
         </div>
         <div>
           <label class="title_form">Ho nhan vien</label>
-          <input type="text" class="form-control" placeholder="Nhap ten" id="ho"/>
+          <input type="text" class="form-control" placeholder="Nhap ho" id="ho"/>
         </div>
       </div>
       <div class="my-2">

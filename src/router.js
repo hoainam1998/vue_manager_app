@@ -36,7 +36,7 @@ const router = new Router({
                     path: 'user',
                     component: User,
                     name: "user",
-                    meta: { requiresAuth: true },
+                    meta: { requiresAuth: true , is_admin: true },
                     children: [
                         {
                             path: '',
@@ -49,7 +49,6 @@ const router = new Router({
                             name: 'create_user',
                             component: Create_user,
                             meta: { requiresAuth: true, is_admin: true },
-
                         }
                     ]
                 },
@@ -62,7 +61,6 @@ const router = new Router({
                             path: '',
                             name: "product_table",
                             component: Table_Product,
-                            meta: { requiresAuth: true }
                         },
                         {
                             name: "create_product",
@@ -82,9 +80,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (user) {
             next()
-            console.log(to.fullPath + ' home')
         } else {
-            console.log('not user')
             next({ path: '/', query: { redirect: to.fullPath } })
         }
 
@@ -92,41 +88,23 @@ router.beforeEach((to, from, next) => {
             if (user.admin) {
                 next('home/user')
             } else {
-                console.log(to.fullPath + ' product')
                 next('home/product')
             }
         }
 
         if (user) {
             if (!user.admin && to.meta.is_admin) {
-                console.log('404')
                 next('/404')
             }
         }
 
     } else if (to.matched.some(record => record.meta.guest)) {
         next()
-        console.log('login')
-        if (user) {
-            console.log(to);
-            let path = localStorage.getItem('path');
-            console.log(path)
-            if (user.admin && path) {
-                console.log('user admin')
-                next(path)
-            } else if (!user.admin && path === '/home/product') {
-                console.log('pass')
-                next(path)
-            } else {
-                next('/404')
-                localStorage.setItem('path', '/home/product')
-            }
-        }
     }
 })
 
 router.afterEach(to => {
-    if (to.name !== '404' && to.name !== 'login') {
+    if (to.fullPath.includes('home')) {
         localStorage.setItem('path', to.fullPath)
     }
 })
