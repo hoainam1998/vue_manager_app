@@ -4,9 +4,7 @@
       <div>
         <h2>Danh sach nguoi dung</h2>
         <b-button variant="success">
-          <router-link to="user/create_user">
-            Tao nguoi dung</router-link
-          >
+          <router-link to="user/create_user"> Tao nguoi dung</router-link>
         </b-button>
       </div>
       <div class="mb-3">
@@ -15,21 +13,16 @@
           <b-input-group prepend="Ten day du" class="mt-3">
             <b-form-input id="search"></b-form-input>
             <b-input-group-append>
-              <b-button variant="outline-success" type="submit">Tim kiem</b-button>
+              <b-button variant="outline-success" type="submit"
+                >Tim kiem</b-button
+              >
               <b-button variant="info" @click.prevent="reset">Dat lai</b-button>
             </b-input-group-append>
           </b-input-group>
         </form>
       </div>
     </div>
-    <b-table
-      id="my-table"
-      :items="users"
-      :per-page="perPage"
-      :current-page="currentPage"
-      :fields="fields"
-      small
-    >
+    <CustomTable :items="this.users" :fields="fields">
       <template #cell(tendaydu)="data">
         {{ data.value.ho }} {{ data.value.ten }}
       </template>
@@ -38,8 +31,7 @@
           <i class="fas fa-edit"></i>
         </button>
       </template>
-    </b-table>
-
+    </CustomTable>
     <div class="pagination_table">
       <div>
         <span>{{ currentPage }}</span>
@@ -58,13 +50,21 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import CustomTable from "../components/Custom_table";
 export default {
   name: "Table_User",
+  components: {
+    CustomTable,
+  },
   data() {
     return {
       perPage: 20,
       currentPage: 1,
-      options:[{value: 20, text: "20"},{value: 50, text: "50"},{value: 100, text: "100"}],
+      options: [
+        { value: 20, text: "20" },
+        { value: 50, text: "50" },
+        { value: 100, text: "100" },
+      ],
       fields: [
         { key: "id", thClass: "d-none", tdClass: "d-none" },
         { key: "tendaydu", label: "Tên Đầy Đủ" },
@@ -87,8 +87,9 @@ export default {
   methods: {
     ...mapActions("user", ["setUsers", "setSpecificUser", "searchUser"]),
     show(item) {
-      this.setSpecificUser(item);
-      this.$router.push('user/create_user')
+      // this.setSpecificUser(item);
+      // this.$router.push("user/create_user");
+      console.log(item);
     },
 
     search() {
@@ -97,9 +98,9 @@ export default {
       this.users = this.$store.getters["user/getUserSearched"];
     },
 
-    reset(){
+    reset() {
       this.users = this.$store.getters["user/getUsers"];
-    }
+    },
   },
   created() {
     this.users = this.$store.getters["user/getUsers"];
