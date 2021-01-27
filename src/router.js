@@ -3,10 +3,9 @@ import Router from 'vue-router'
 import Home from './views/Home'
 import Login from './views/Login'
 import Create_user from './views/Create_User'
-import Table_User from './views/Table_User'
+import Container from './views/Container'
 import User from './views/User_board'
 import Product from './views/Product_board'
-import Table_Product from './views/Table_Product'
 import Create_Product from './views/Create_Product'
 import PageNotFound from './views/404'
 Vue.use(Router)
@@ -33,7 +32,7 @@ const router = new Router({
             meta: { requiresAuth: true },
             children: [
                 {
-                    path: 'user',
+                    path: ':name',
                     component: User,
                     name: "user",
                     meta: { requiresAuth: true , is_admin: true },
@@ -41,7 +40,7 @@ const router = new Router({
                         {
                             path: '',
                             name: 'user_table',
-                            component: Table_User,
+                            component: Container,
                             meta: { requiresAuth: true, is_admin: true }
                         },
                         {
@@ -53,14 +52,14 @@ const router = new Router({
                     ]
                 },
                 {
-                    path: 'product',
+                    path: ':name',
                     name: 'product',
                     component: Product,
                     children: [
                         {
                             path: '',
                             name: "product_table",
-                            component: Table_Product,
+                            component: Container,
                         },
                         {
                             name: "create_product",
