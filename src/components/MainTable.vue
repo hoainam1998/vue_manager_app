@@ -2,27 +2,35 @@
   <section class="content">
     <div class="manipulation">
       <div>
-        <h2>Danh sach nguoi dung</h2>
+        <h2>Danh sach {{objData.title}}</h2>
         <b-button variant="success">
-          <router-link to="user/create_user"> Tao nguoi dung</router-link>
+          <router-link to="user/create_user"> Tao {{objData.title}}</router-link>
         </b-button>
       </div>
       <div class="mb-3">
         <b-form-select :options="options" v-model="perPage"></b-form-select>
-        <form @submit.prevent="search()">
+        <form @submit.prevent="searchItem">
           <b-input-group prepend="Ten day du" class="mt-3">
             <b-form-input id="search"></b-form-input>
             <b-input-group-append>
               <b-button variant="outline-success" type="submit"
                 >Tim kiem</b-button
               >
-              <b-button variant="info" @click.prevent="reset">Dat lai</b-button>
+              <b-button variant="info" @click.prevent="setItem"
+                >Dat lai</b-button
+              >
             </b-input-group-append>
           </b-input-group>
         </form>
       </div>
     </div>
-    <CustomTable :items="this.users" :fields="fields">
+
+    <CustomTable
+      :items="objData.data"
+      :fields="objData.fields"
+      :per-page="perPage"
+      :current-page="currentPage"
+    >
       <template #cell(tendaydu)="data">
         {{ data.value.ho }} {{ data.value.ten }}
       </template>
@@ -32,6 +40,7 @@
         </button>
       </template>
     </CustomTable>
+
     <div class="pagination_table">
       <div>
         <span>{{ currentPage }}</span>
@@ -49,62 +58,62 @@
   </section>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import CustomTable from "../components/Custom_table";
 export default {
-  name: "Table_User",
+  name: "MainTable",
   components: {
     CustomTable,
   },
+  props:['objData'],
   data() {
     return {
-      perPage: 20,
-      currentPage: 1,
+      perPage: 2,
       options: [
-        { value: 20, text: "20" },
-        { value: 50, text: "50" },
-        { value: 100, text: "100" },
+        { value: 2, text: "2" },
+        { value: 5, text: "5" },
+        { value: 10, text: "10" },
       ],
-      fields: [
-        { key: "id", thClass: "d-none", tdClass: "d-none" },
-        { key: "tendaydu", label: "Tên Đầy Đủ" },
-        { key: "tendangnhap", label: "Tên Đăng Nhập" },
-        { key: "ngayduoctao", label: "Ngày Được Tạo" },
-        { key: "trangthai", label: "Trạng Thái" },
-        { key: "thaotac", label: "Thao Tác" },
-      ],
-      users: [],
+      currentPage: 1
     };
   },
   computed: {
     rows() {
-      return this.users.length;
+      return this.objData.data.length;
     },
     totalPage() {
-      return Math.ceil(this.users.length / this.perPage);
+      return Math.ceil(this.objData.data.length/ this.perPage);
     },
   },
   methods: {
     ...mapActions("user", ["setUsers", "setSpecificUser", "searchUser"]),
+    ...mapGetters("user", ["getUsers", "getUserSearched"]),
+    ...mapActions("product", ["searchProduct"]),
+    ...mapGetters("product", ["getListProductSearch", "getProducts"]),
     show(item) {
       // this.setSpecificUser(item);
       // this.$router.push("user/create_user");
       console.log(item);
     },
 
-    search() {
-      let value_search = document.querySelector("#search").value;
-      this.searchUser(value_search);
-      this.users = this.$store.getters["user/getUserSearched"];
+    changePage(page) {
+      this.currentPage = page;
     },
 
-    reset() {
-      this.users = this.$store.getters["user/getUsers"];
+    changeRow(rows) {
+      this.perPage = rows;
+      this.currentPage = 1;
     },
-  },
-  created() {
-    this.users = this.$store.getters["user/getUsers"];
-  },
+
+    searchItem() {
+      let value_search = document.querySelector("#search").value;
+      this.objData.search(value_search)
+    },
+
+    setItem(){
+      this.objData.reset();
+    }
+  }
 };
 </script>
 <style scoped>

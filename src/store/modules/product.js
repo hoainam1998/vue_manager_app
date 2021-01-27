@@ -2,21 +2,21 @@ import axios from 'axios'
 const state = {
     products: [],
     specificProduct: {},
-    listProductSearch:[]
+    listProductSearch: []
 };
 
 const getters = {
     getProducts: (state) => (state.products),
     getSpecificProduct: (state) => (state.specificProduct),
-    getListProductSearch:(state)=>(state.listProductSearch)
+    getProductSearched: (state) => (state.listProductSearch)
 }
 
 const actions = {
     async setProducts({ commit }) {
-        try{
+        try {
             let res = await axios.get('./product.json')
-        commit('setProducts', res.data)
-        }catch(err){console.log(err.message)}
+            commit('setProducts', res.data)
+        } catch (err) { console.log(err.message) }
     },
 
     setSpecificProduct({ commit }, product) {
@@ -28,11 +28,11 @@ const actions = {
     },
 
     updateProducts({ commit }, product) {
-        commit('updateProducts',product)
+        commit('updateProducts', product)
     },
 
-    search({commit},value_search){
-        commit('search',value_search)
+    searchProduct({ commit }, value_search) {
+        commit('searchProduct', value_search)
     }
 }
 
@@ -44,21 +44,22 @@ const mutations = {
     createProducts: (state, product) => (state.products.unshift(product)),
 
     updateProducts: (state, product) => (
-        state.products=state.products.map(p => p.id === product.id ?
-        {
-            id: p.id,
-            tensanpham: p.tensanpham,
-            ngaytao: p.ngaytao,
-            ngaycapnhapganday: product.ngaycapnhapganday,
-            gia: product.gia,
-            trangthai: product.trangthai
-        }:p)),
+        state.products = state.products.map(p => p.id === product.id ?
+            {
+                id: p.id,
+                tensanpham: p.tensanpham,
+                ngaytao: p.ngaytao,
+                ngaycapnhapganday: product.ngaycapnhapganday,
+                gia: product.gia,
+                trangthai: product.trangthai
+            } : p)),
 
-    search:(state,value_search)=>{
-        let listProductSearch=state.products.filter(product=>product.tensanpham.toLowerCase().includes(value_search.toLowerCase()));
-        state.listProductSearch=listProductSearch;
+
+    searchProduct: (state, value_search) => {
+        let listProductSearch = state.products.filter(product => product.tensanpham.toLowerCase().includes(value_search.toLowerCase()));
+        state.listProductSearch = listProductSearch;
     }
-    
+
 }
 
 export default { namespaced: true, state, getters, actions, mutations }

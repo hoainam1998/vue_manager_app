@@ -23,7 +23,7 @@
       </div>
     </div>
     <div>
-      <b-table
+      <!-- <b-table
         sticky-header
         head-variant="light"
         :items="products"
@@ -44,8 +44,24 @@
             <i class="fas fa-edit"></i>
           </button>
         </template>
-      </b-table>
+      </b-table> -->
 
+      <CustomTable :items="products" :fields="fields">
+        <template #cell(gia)="data">
+          {{
+            data.value.toLocaleString("it-IT", {
+              style: "currency",
+              currency: "VND",
+            })
+          }}
+        </template>
+        <template #cell(thaotac)="row">
+          <button class="update" @click="show(row.item)">
+            <i class="fas fa-edit"></i>
+          </button>
+        </template>
+      </CustomTable>
+      
       <div class="pagination_table">
         <div>
           <span>{{ currentPage }}</span>
@@ -64,8 +80,12 @@
   </section>
 </template>
 <script>
+import CustomTable from '../components/Custom_table'
 export default {
   name: "Table_Product",
+  components: {
+    CustomTable
+  },
   data() {
     return {
       perPage: 20,
@@ -104,8 +124,9 @@ export default {
   },
   methods: {
     show(item) {
-      this.$store.dispatch("product/setSpecificProduct", item);
-      this.$router.push("product/create_product");
+      // this.$store.dispatch("product/setSpecificProduct", item);
+      // this.$router.push("product/create_product");
+     alert(item.tensanpham)
     },
     search() {
       let value_search = document.querySelector("#search").value;

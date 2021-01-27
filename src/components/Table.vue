@@ -1,10 +1,11 @@
-
 <script>
 export default {
     name: "Table",
     props: [
           'items',
-          'fields'
+          'fields',
+          'per-page',
+          'current-page'
         ],
   render(h) {
     return h('b-table', {

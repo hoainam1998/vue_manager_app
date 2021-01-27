@@ -6,7 +6,7 @@
         <span >Cai dat<i class="fas fa-caret-down"></i></span>
         <ul class="sub_list">
           <li v-if="show"><router-link to="/home/user" >Nguoi dung</router-link></li>
-          <li><router-link to="/home/product" >San pham</router-link></li>
+          <li><router-link to="/home/product">San pham</router-link></li>
         </ul>
       </li>
       <li>Quan li</li>
