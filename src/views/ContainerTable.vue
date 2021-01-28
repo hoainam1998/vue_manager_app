@@ -20,6 +20,7 @@ export default {
         reset: this.resetUsers,
         setItem: this.setSpecificUser_,
         getSpecificItem: this.getSpecificUser,
+        showDetail: this.showDetailUpdateUser,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
           { key: "tendaydu", label: "Tên Đầy Đủ" },
@@ -36,7 +37,8 @@ export default {
         search: this.searchProducts,
         reset: this.resetProducts,
         setItem: this.setSpecificProduct_,
-        getSpecificItem:this.getSpecificProduct,
+        getSpecificItem: this.getSpecificProduct,
+        showDetail: this.showDetailUpdateProduct,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
           { key: "tensanpham", label: "Tên Sản Phẩm" },
@@ -99,6 +101,14 @@ export default {
 
     setSpecificUser_(user){
       this.setSpecificUser(user)
+    },
+
+    showDetailUpdateProduct(id){
+      this.$router.push('product/update-product/'+id)
+    },
+
+    showDetailUpdateUser(id){
+      this.$router.push('user/update-user/'+id)
     }
     
   },
