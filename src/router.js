@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Login from './views/Login'
-import Create_user from './views/Create_User'
-import Container from './views/Container'
+import ContainerTable from './views/ContainerTable'
 import User from './views/User_board'
+import UserForm from './views/UserForm'
 import Product from './views/Product_board'
-import Create_Product from './views/Create_Product'
+import ProductForm from './views/ProductForm'
 import PageNotFound from './views/404'
 Vue.use(Router)
 
@@ -35,19 +35,22 @@ const router = new Router({
                     path: ':name',
                     component: User,
                     name: "user",
-                    meta: { requiresAuth: true , is_admin: true },
+                    meta: { requiresAuth: true, is_admin: true },
                     children: [
                         {
                             path: '',
                             name: 'user_table',
-                            component: Container,
-                            meta: { requiresAuth: true, is_admin: true }
+                            component: ContainerTable,
                         },
-                        {
-                            path: 'create_user',
-                            name: 'create_user',
-                            component: Create_user,
-                            meta: { requiresAuth: true, is_admin: true },
+                        { 
+                            name: 'userform',
+                            path: 'create-user',
+                            component: UserForm,
+                        },
+                        { 
+                            name: 'userform',
+                            path: 'update-user',
+                            component: UserForm,
                         }
                     ]
                 },
@@ -55,16 +58,17 @@ const router = new Router({
                     path: ':name',
                     name: 'product',
                     component: Product,
+                    meta: { requiresAuth: true },
                     children: [
                         {
                             path: '',
                             name: "product_table",
-                            component: Container,
+                            component: ContainerTable,
                         },
                         {
-                            name: "create_product",
-                            path: "create_product",
-                            component: Create_Product,
+                            name: "productform",
+                            path: "create-product",
+                            component: ProductForm,
                             meta: { requiresAuth: true, is_admin: true },
                         }
                     ]

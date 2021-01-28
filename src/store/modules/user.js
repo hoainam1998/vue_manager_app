@@ -19,9 +19,9 @@ const actions = {
         } catch (err) { console.log(err.message) }
     },
 
-    addListUsers({ commit }, user) {
+    addUser({ commit }, user) {
         console.log('add list users ')
-        commit('addListUser', user)
+        commit('addUser', user)
     },
 
     updateListUsers({ commit }, user) {
@@ -40,7 +40,7 @@ const actions = {
 const mutations = {
     setUsers: (state, users) => (state.users = users),
 
-    addListUser: (state, user) => (state.users.unshift(user)),
+    addUser: (state, user) => (state.users.unshift(user)),
 
     updateListUsers: (state, user) => {
         state.users=state.users.map(us => us.id === user.id ? {

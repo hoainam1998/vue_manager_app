@@ -14,9 +14,12 @@ export default {
     return {
       users: {
         data: [],
+        name:'user',
         title: "nguoi dung",
         search: this.searchUsers,
         reset: this.resetUsers,
+        setItem: this.setSpecificUser_,
+        getSpecificItem: this.getSpecificUser,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
           { key: "tendaydu", label: "Tên Đầy Đủ" },
@@ -28,9 +31,12 @@ export default {
       },
       products: {
         data: [],
+        name: 'product',
         title: "san pham",
         search: this.searchProducts,
         reset: this.resetProducts,
+        setItem: this.setSpecificProduct_,
+        getSpecificItem:this.getSpecificProduct,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
           { key: "tensanpham", label: "Tên Sản Phẩm" },
@@ -46,10 +52,10 @@ export default {
     };
   },
   methods: {
-    ...mapActions("user", ["searchUser"]),
-    ...mapGetters("user", ["getUsers", "getUserSearched"]),
-    ...mapActions("product", ["searchProduct"]),
-    ...mapGetters("product", ["getProducts", "getProductSearched"]),
+    ...mapActions("user", ["searchUser","setSpecificUser"]),
+    ...mapGetters("user", ["getUsers", "getUserSearched","getSpecificUser"]),
+    ...mapActions("product", ["searchProduct","setSpecificProduct"]),
+    ...mapGetters("product", ["getProducts", "getProductSearched","getSpecificProduct"]),
     setItem() {
       let { name } = this.$route.params;
       if (name === "user") {
@@ -86,6 +92,15 @@ export default {
       this.users.data = users;
       this.objData = this.users;
     },
+
+    setSpecificProduct_(product){
+      this.setSpecificProduct(product)
+    },
+
+    setSpecificUser_(user){
+      this.setSpecificUser(user)
+    }
+    
   },
   created() {
     this.setItem();
@@ -94,6 +109,7 @@ export default {
     let condition = 1;
     if (condition < 0) { console.log(to + " " + from + " " + next); }
     this.setItem();
+    next()
   }
 };
 </script>

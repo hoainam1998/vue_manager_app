@@ -46,7 +46,7 @@ ul {
   border-radius: 5px;
 }
 
-.title_form {
+.title_form label{
   display: block;
   color: #27ae60;
   font-weight: bold;

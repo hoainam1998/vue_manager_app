@@ -2,9 +2,11 @@
   <section class="content">
     <div class="manipulation">
       <div>
-        <h2>Danh sach {{objData.title}}</h2>
+        <h2>Danh sach {{ objData.title }}</h2>
         <b-button variant="success">
-          <router-link to="user/create_user"> Tao {{objData.title}}</router-link>
+          <router-link :to="`user/create-${objData.name}`">
+            Tao {{ objData.title }}</router-link
+          >
         </b-button>
       </div>
       <div class="mb-3">
@@ -16,7 +18,7 @@
               <b-button variant="outline-success" type="submit"
                 >Tim kiem</b-button
               >
-              <b-button variant="info" @click.prevent="setItem"
+              <b-button variant="info" @click.prevent="reset"
                 >Dat lai</b-button
               >
             </b-input-group-append>
@@ -25,11 +27,13 @@
       </div>
     </div>
 
-    <CustomTable
+    <b-table
+      id="my-table"
       :items="objData.data"
       :fields="objData.fields"
       :per-page="perPage"
       :current-page="currentPage"
+      small
     >
       <template #cell(tendaydu)="data">
         {{ data.value.ho }} {{ data.value.ten }}
@@ -39,7 +43,7 @@
           <i class="fas fa-edit"></i>
         </button>
       </template>
-    </CustomTable>
+    </b-table>
 
     <div class="pagination_table">
       <div>
@@ -59,13 +63,9 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import CustomTable from "../components/Custom_table";
 export default {
   name: "MainTable",
-  components: {
-    CustomTable,
-  },
-  props:['objData'],
+  props: ["objData"],
   data() {
     return {
       perPage: 2,
@@ -74,7 +74,7 @@ export default {
         { value: 5, text: "5" },
         { value: 10, text: "10" },
       ],
-      currentPage: 1
+      currentPage: 1,
     };
   },
   computed: {
@@ -82,7 +82,7 @@ export default {
       return this.objData.data.length;
     },
     totalPage() {
-      return Math.ceil(this.objData.data.length/ this.perPage);
+      return Math.ceil(this.objData.data.length / this.perPage);
     },
   },
   methods: {
@@ -93,26 +93,21 @@ export default {
     show(item) {
       // this.setSpecificUser(item);
       // this.$router.push("user/create_user");
-      console.log(item);
-    },
-
-    changePage(page) {
-      this.currentPage = page;
-    },
-
-    changeRow(rows) {
-      this.perPage = rows;
-      this.currentPage = 1;
+      this.objData.setItem(item);
     },
 
     searchItem() {
       let value_search = document.querySelector("#search").value;
-      this.objData.search(value_search)
+      this.objData.search(value_search);
     },
 
-    setItem(){
+    reset() {
       this.objData.reset();
-    }
+    },
+  },
+  created(){
+    let item=this.objData.getSpecificItem();
+    console.log(item)
   }
 };
 </script>
