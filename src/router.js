@@ -43,13 +43,13 @@ const router = new Router({
                             component: ContainerTable,
                         },
                         { 
-                            name: 'userform',
+                            name: 'create-user',
                             path: 'create-user',
                             component: UserForm,
                         },
                         { 
-                            name: 'userform',
-                            path: 'update-user',
+                            name: 'update-user',
+                            path: 'update-user/:id',
                             component: UserForm,
                         }
                     ]
@@ -66,8 +66,14 @@ const router = new Router({
                             component: ContainerTable,
                         },
                         {
-                            name: "productform",
+                            name: "create-product",
                             path: "create-product",
+                            component: ProductForm,
+                            meta: { requiresAuth: true, is_admin: true },
+                        },
+                        {
+                            name: "update-product",
+                            path: "update-product/:id",
                             component: ProductForm,
                             meta: { requiresAuth: true, is_admin: true },
                         }

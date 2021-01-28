@@ -94,6 +94,7 @@ export default {
       // this.setSpecificUser(item);
       // this.$router.push("user/create_user");
       this.objData.setItem(item);
+      this.objData.showDetail(item.id)
     },
 
     searchItem() {
