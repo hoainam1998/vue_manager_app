@@ -1,14 +1,13 @@
 import axios from 'axios'
 const state = {
     users: [],
-    specificUser: {},
-    listUserSearched: []
+    listUserSearched: [],
 }
 
 const getters = {
     getUsers: (state) => (state.users),
-    getSpecificUser: (state) => (state.specificUser),
-    getUserSearched: (state) => (state.listUserSearched)
+    getUserSearched: (state) => (state.listUserSearched),
+    getUserReload: (state) => (state.userReload)
 }
 
 const actions = {
@@ -20,51 +19,45 @@ const actions = {
     },
 
     addUser({ commit }, user) {
-        console.log('add list users ')
+        console.log(user)
         commit('addUser', user)
     },
 
-    updateListUsers({ commit }, user) {
-        commit('updateListUsers', user)
-    },
-
-    setSpecificUser({ commit }, user) {
-        commit('setSpecificUser', user)
+    updateUser({ commit }, user) {
+        commit('updateUser', user)
     },
 
     searchUser({ commit }, search) {
         commit('searchUser', search)
+    },
+
+    setReload({commit}){
+        commit('reload')
     }
 }
 
 const mutations = {
-    setUsers: (state, users) => (state.users = users),
+    setUsers: (state,users) => {state.users=users},
 
-    addUser: (state, user) => (state.users.unshift(user)),
-
-    updateListUsers: (state, user) => {
-        state.users=state.users.map(us => us.id === user.id ? {
-            id: us.id,
-            power: us.power,
-            tendangnhap: us.tendangnhap,
-            matkhau: us.matkhau,
-            tendaydu: user.tendaydu,
-            ngayduoctao: us.ngayduoctao,
-            trangthai: user.trangthai
-        } : us)
+    addUser: (state,user)=> {
+        state.users.unshift(user);
     },
-    
-    setSpecificUser: (state, user) => (state.specificUser = user),
+
+    updateUser: (state, user) => {
+        let index=state.users.findIndex(item=>item.id===user.id);
+        state.users.splice(index,1)
+        state.users.splice(index,0,user)
+    },
 
     searchUser: (state, value_search) => {
-        let listSearch=[]
+        let listSearch = []
         state.users.forEach(function (user) {
             if (user.tendaydu.ten.toLowerCase().includes(value_search.toLowerCase())) {
-               listSearch.push(user);         
+                listSearch.push(user);
             }
-            state.listUserSearched=listSearch;
+            state.listUserSearched = listSearch;
         })
-    }
+    },
 }
 
 export default { namespaced: true, state, actions, getters, mutations }

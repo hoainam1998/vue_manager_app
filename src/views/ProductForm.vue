@@ -1,94 +1,141 @@
 <template>
   <section class="content">
-    <b-alert show variant="danger" v-if="err">{{ err }}</b-alert>
-    <form id="create_user" @submit.prevent="handleSubmit">
-      <div class="layout_form">
-        <div>
-          <label class="title_form">Ten san pham</label>
-         <input class="form-control" type="text" id="ten" :disabled="disabled" placeholder="Nhap ten san pham"/>
-        </div>
-        <div>
-          <label class="title_form">Gia san pham</label>
-          <input class="form-control" type="text" id="gia" placeholder="Nhap gia san pham"/>
-        </div>
+    <!-- @submit.prevent="handleSubmit" -->
+    <b-form @submit.stop.prevent="handleSubmit">
+      <div class="layout_form title_form">
+        <b-form-group
+          id="example-input-group-1"
+          label="Ten san pham"
+          label-for="example-input-1"
+        >
+          <b-form-input
+            id="example-input-1"
+            name="example-input-1"
+            aria-describedby="input-1-live-feedback"
+            v-model="$v.sanpham.tensanpham.$model"
+            :state="validateState('tensanpham')"
+            :disabled="disabled"
+          ></b-form-input>
+
+          <b-form-invalid-feedback id="input-1-live-feedback"
+            >This is a required field and must be at least 4 characters and most
+            15 characters.</b-form-invalid-feedback
+          >
+        </b-form-group>
+
+        <b-form-group
+          id="example-input-group-1"
+          label="Gia san pham"
+          label-for="example-input-1"
+        >
+          <b-form-input
+            id="example-input-1"
+            name="example-input-1"
+            aria-describedby="input-1-live-feedback"
+            v-model="$v.sanpham.gia.$model"
+            :state="validateState('gia')"
+          ></b-form-input>
+
+          <b-form-invalid-feedback id="input-1-live-feedback"
+            >This is a required field and must be at least 4 characters and is
+            number.</b-form-invalid-feedback
+          >
+        </b-form-group>
       </div>
-      <div class="my-2">
+
+      <div class="displayflex">
         <b-form-checkbox
+          id="checkbox-1"
           name="trangthai_checkbox"
+          v-model="sanpham.trangthai"
           value="Hoat dong"
           unchecked-value="Ko hoat dong"
-          v-model="product.trangthai"
         >
           Trang thai
         </b-form-checkbox>
+        <div>
+          <b-button type="submit" variant="success">Submit</b-button>
+          <b-button class="ml-2" variant="success"
+            ><router-link to="/home/user">Huy</router-link></b-button
+          >
+        </div>
       </div>
-      <div class="group_button">
-        <b-button variant="success" class="mr-2" type="submit">
-          {{ disabled ? "Cap nhap" : "Tao" }}
-        </b-button>
-        <b-button variant="success">
-          <router-link to="/home/product"> Huy</router-link> 
-        </b-button>
-      </div>
-    </form>
+    </b-form>
   </section>
 </template>
 <script>
+import { validationMixin } from "vuelidate";
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+} from "vuelidate/lib/validators";
 import { mapActions } from "vuex";
 import { v4 } from "uuid";
 export default {
   name: "Create_Product",
   data() {
     return {
-      product: {
-        id: "",
+      sanpham: {
         tensanpham: "",
         gia: "",
         trangthai: "Ko hoat dong",
       },
       disabled: false,
-      err: "",
     };
   },
+  mixins: [validationMixin],
+  validations: {
+    sanpham: {
+      tensanpham: {
+        required,
+        minLength: minLength(4),
+      },
+      gia: {
+        required,
+        minLength: minLength(4),
+        maxLength: maxLength(7),
+        numeric,
+      },
+    },
+  },
   methods: {
-    ...mapActions("product", ["createProducts", "updateProducts"]),
+    ...mapActions("product", ["addProduct", "updateProduct"]),
+    validateState(name) {
+      const { $dirty, $error } = this.$v.sanpham[name];
+      return $dirty ? !$error : null;
+    },
+
     createProduct() {
       const product = {
         id: v4(),
-        tensanpham: this.product.tensanpham,
+        tensanpham: this.sanpham.tensanpham,
         ngaytao: this.getDate(),
         ngaycapnhapganday: this.getDate(),
-        gia: parseInt(this.product.gia),
-        trangthai: this.product.trangthai,
+        gia: parseInt(this.sanpham.gia),
+        trangthai: this.sanpham.trangthai,
       };
-      this.createProducts(product);
-    },
+      this.addProduct(product);
+    },    
 
-    updateProduct() {
-      const updateProduct = {
-        id: this.product.id,
-        gia: parseInt(this.product.gia),
-        trangthai: this.product.trangthai,
-        ngaycapnhapganday: this.getDate(),
-      };
-      this.updateProducts(updateProduct);
-      this.$store.dispatch("product/setSpecificProduct", {});
+    save(){
+      if(this.disabled){
+        this.updateProduct(this.sanpham);
+      }else {
+        this.createProduct()
+      }
     },
 
     handleSubmit() {
-      this.product.gia=document.querySelector('#gia').value;
-      this.product.tensanpham=document.querySelector('#ten').value;
-      if (this.check_isNumber(this.product.gia)) {
-        if (this.disabled === false) {
-          this.createProduct();
-        } else {
-          this.updateProduct();
-        }
-        this.$router.push("/home/product");
-      } else {
-        this.err = "Gia san pham phai la so!";
+      this.$v.sanpham.$touch();
+      if (this.$v.sanpham.$anyError) {
+        return;
       }
+      this.save()
+      this.$router.push('/home/product')
     },
+
     getDate() {
       let date = new Date();
       let day =
@@ -101,28 +148,19 @@ export default {
         })}`;
       return day;
     },
-    check_isNumber(gia) {
-      gia = gia.toString();
-      for (let char of gia) {
-        if (parseInt(char).toString() === "NaN") {
-          return false;
-        }
-      }
-      return true;
-    },
   },
-  mounted(){
-    let product = this.$store.getters["product/getSpecificProduct"];
-    if (typeof product.id !== "undefined") {
-      this.disabled = true;
-      document.querySelector('#ten').value=product.tensanpham;
-      document.querySelector('#gia').value=product.gia;
-      this.product.trangthai=product.trangthai;
-      this.product.id=product.id;
+
+  created() {
+    let sanpham=JSON.parse(localStorage.getItem('product'));
+
+    if(sanpham){
+      this.sanpham=sanpham;
+      this.disabled=true
     }
   },
+
   beforeDestroy() {
-    this.$store.dispatch("product/setSpecificProduct", {});
+    localStorage.removeItem('product')
   },
 };
 </script>
@@ -134,15 +172,6 @@ export default {
   grid-row-gap: 15px;
 }
 
-.group_button {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.group_button button {
-  width: 150px;
-}
-
 a,
 a:hover {
   color: white;
@@ -151,6 +180,6 @@ a:hover {
 }
 
 .btn-success {
-  padding: 0;
+  width: 120px;
 }
 </style>

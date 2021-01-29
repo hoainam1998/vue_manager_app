@@ -12,13 +12,14 @@
             id="example-input-1"
             name="example-input-1"
             aria-describedby="input-1-live-feedback"
-            v-model="$v.form.tendangnhap.$model"
+            v-model="$v.user.tendangnhap.$model"
             :state="validateState('tendangnhap')"
+            :disabled="disabled"
           ></b-form-input>
 
           <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 4
-            characters.</b-form-invalid-feedback
+            >This is a required field and must be at least 4 characters and most
+            15 characters.</b-form-invalid-feedback
           >
         </b-form-group>
 
@@ -31,13 +32,13 @@
             id="example-input-1"
             name="example-input-1"
             aria-describedby="input-1-live-feedback"
-            v-model="$v.form.tennhanvien.$model"
-            :state="validateState('tennhanvien')"
+            v-model="$v.user.tendaydu.ten.$model"
+            :state="validateState('ten')"
           ></b-form-input>
 
           <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 4
-            characters.</b-form-invalid-feedback
+            >This is a required field and must be at least 2 characters and most
+            15 characters.</b-form-invalid-feedback
           >
         </b-form-group>
 
@@ -50,13 +51,13 @@
             id="example-input-1"
             name="example-input-1"
             aria-describedby="input-1-live-feedback"
-            v-model="$v.form.honhanvien.$model"
-            :state="validateState('honhanvien')"
+            v-model="$v.user.tendaydu.ho.$model"
+            :state="validateState('ho')"
           ></b-form-input>
 
           <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 4
-            characters.</b-form-invalid-feedback
+            >This is a required field and must be at least 2 characters and most
+            6 characters.</b-form-invalid-feedback
           >
         </b-form-group>
       </div>
@@ -65,7 +66,7 @@
         <b-form-checkbox
           id="checkbox-1"
           name="trangthai_checkbox"
-          v-model="form.trangthai"
+          v-model="user.trangthai"
           value="Dang lam"
           unchecked-value="Da nghi"
         >
@@ -84,44 +85,61 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
-import {createNamespacedHelpers} from 'vuex'
-const {mapActions} =createNamespacedHelpers('user')
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import { createNamespacedHelpers } from "vuex";
+const { mapActions, mapGetters } = createNamespacedHelpers("user");
 import { v4 } from "uuid";
 export default {
   name: "UserForm",
   data() {
     return {
-      form: {
+      user: {
         tendangnhap: "",
-        tennhanvien: "",
-        honhanvien: "",
+        tendaydu: { ten: "", ho: "" },
         trangthai: "Da nghi",
-      }
+      },
+      disabled: false,
     };
   },
   methods: {
-    ...mapActions(['addUser']),
+    ...mapActions(["addUser", "setSpecificUser", "updateUser","setUsers","setReload"]),
+    ...mapGetters(["getSpecificUser"]),
     validateState(name) {
-      const { $dirty, $error } = this.$v.form[name];
-      return $dirty ? !$error : null;
-  },
+      if (name === "ho" || name === "ten") {
+        const { $dirty, $error } = this.$v.user.tendaydu[name];
+        return $dirty ? !$error : null;
+      } else {
+        const { $dirty, $error } = this.$v.user[name];
+        return $dirty ? !$error : null;
+      }
+    },
+
     handleSubmit() {
-      this.$v.form.$touch();
-      if (this.$v.form.$anyError) {
+      this.$v.user.$touch();
+      if (this.$v.user.$anyError) {
         return;
       }
 
       this.save();
-      console.log("ok");
+      this.setReload();
     },
     save() {
-      this.createUser();
+      try {
+        if (this.disabled) {
+          this.updateUser_();
+        } else {
+          this.createUser();
+        }
+        this.$router.push("/home/user");
+      } catch (err) {
+        console.log(err)
+      }
     },
+
     createUser() {
       let date = new Date();
       let day =
-        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()},` +
+        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} , ` +
         `${date.toLocaleString("en-US", {
           hour: "numeric",
           minute: "numeric",
@@ -131,34 +149,50 @@ export default {
       const user_obj = {
         id: v4(),
         power: "user",
-        tendangnhap: this.form.tendangnhap,
+        tendangnhap: this.user.tendangnhap,
         matkhau: "123456",
-        tendaydu: {ten:this.form.tennhanvien,ho:this.form.honhanvien},
+        tendaydu: this.user.tendaydu,
         ngayduoctao: day,
-        trangthai: this.form.trangthai,
+        trangthai: this.user.trangthai,
       };
 
-      this.addUser(user_obj)
+      this.addUser(user_obj);
     },
-    updateUser(){
-      console.log('user')
+
+    updateUser_() {
+      this.updateUser(this.user);
+    },
+  },
+  created() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      this.user = user;
+      this.disabled = true;
     }
+  },
+  beforeDestroy() {
+    localStorage.removeItem("user");
   },
   mixins: [validationMixin],
   validations: {
-    form: {
+    user: {
       tendangnhap: {
         required,
         minLength: minLength(4),
+        maxLength: maxLength(15),
       },
-      tennhanvien: {
-        required,
-        minLength: minLength(2),
+      tendaydu: {
+        ten: {
+          required,
+          minLength: minLength(2),
+          maxLength: maxLength(15),
+        },
+        ho: {
+          required,
+          minLength: minLength(2),
+          maxLength: maxLength(6),
+        },
       },
-      honhanvien: {
-        required,
-        minLength: minLength(2)
-      }
     },
   },
 };
@@ -180,22 +214,4 @@ export default {
   grid-column: 2;
 }
 
-.group_button {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.group_button button {
-  width: 150px;
-}
-
-.btn-success {
-  width: 100px;
-}
-
-.displayflex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 </style>

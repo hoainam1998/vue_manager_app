@@ -14,7 +14,8 @@ export default {
   },
   async created(){
     await this.setUsers();
-    await this.setProducts()
+    await this.setProducts();
+    console.log('app init')
   }
 }
 </script>
@@ -72,4 +73,11 @@ a:hover {
   text-decoration: none !important;
   display: block;
 }
+
+.displayflex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 </style>

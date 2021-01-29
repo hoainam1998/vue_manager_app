@@ -1,4 +1,4 @@
-<template>
+clear<template>
   <section class="content">
     <div class="manipulation">
       <div>
@@ -18,15 +18,13 @@
               <b-button variant="outline-success" type="submit"
                 >Tim kiem</b-button
               >
-              <b-button variant="info" @click.prevent="reset"
-                >Dat lai</b-button
-              >
+              <b-button variant="info" @click.prevent="reset">Dat lai</b-button>
             </b-input-group-append>
           </b-input-group>
         </form>
       </div>
     </div>
-
+    <!-- table -->
     <b-table
       id="my-table"
       :items="objData.data"
@@ -44,7 +42,7 @@
         </button>
       </template>
     </b-table>
-
+    <!-- table -->
     <div class="pagination_table">
       <div>
         <span>{{ currentPage }}</span>
@@ -91,10 +89,8 @@ export default {
     ...mapActions("product", ["searchProduct"]),
     ...mapGetters("product", ["getListProductSearch", "getProducts"]),
     show(item) {
-      // this.setSpecificUser(item);
-      // this.$router.push("user/create_user");
       this.objData.setItem(item);
-      this.objData.showDetail(item.id)
+      this.objData.showDetail(item.id);
     },
 
     searchItem() {
@@ -105,10 +101,6 @@ export default {
     reset() {
       this.objData.reset();
     },
-  },
-  created(){
-    let item=this.objData.getSpecificItem();
-    console.log(item)
   }
 };
 </script>
