@@ -1,7 +1,6 @@
 import axios from 'axios'
 const state = {
     products: [],
-    specificProduct: {},
     listProductSearch: []
 };
 
@@ -23,12 +22,12 @@ const actions = {
         commit('setSpecificProduct', product)
     },
 
-    createProducts({ commit }, product) {
-        commit('createProducts', product)
+    addProduct({ commit }, product) {
+        commit('addProduct', product)
     },
 
-    updateProducts({ commit }, product) {
-        commit('updateProducts', product)
+    updateProduct({ commit }, product) {
+        commit('updateProduct', product)
     },
 
     searchProduct({ commit }, value_search) {
@@ -39,21 +38,13 @@ const actions = {
 const mutations = {
     setProducts: (state, products) => (state.products = products),
 
-    setSpecificProduct: (state, product) => (state.specificProduct = product),
+    addProduct: (state, product) => (state.products.unshift(product)),
 
-    createProducts: (state, product) => (state.products.unshift(product)),
-
-    updateProducts: (state, product) => (
-        state.products = state.products.map(p => p.id === product.id ?
-            {
-                id: p.id,
-                tensanpham: p.tensanpham,
-                ngaytao: p.ngaytao,
-                ngaycapnhapganday: product.ngaycapnhapganday,
-                gia: product.gia,
-                trangthai: product.trangthai
-            } : p)),
-
+    updateProduct: (state, product) => {
+        let index=state.products.findIndex(item=>item.id===product.id);
+        state.products.splice(index,1)
+        state.products.splice(index,0,product)
+    },
 
     searchProduct: (state, value_search) => {
         let listProductSearch = state.products.filter(product => product.tensanpham.toLowerCase().includes(value_search.toLowerCase()));

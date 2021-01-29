@@ -14,12 +14,11 @@ export default {
     return {
       users: {
         data: [],
-        name:'user',
+        name: "user",
         title: "nguoi dung",
         search: this.searchUsers,
         reset: this.resetUsers,
         setItem: this.setSpecificUser_,
-        getSpecificItem: this.getSpecificUser,
         showDetail: this.showDetailUpdateUser,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
@@ -32,12 +31,11 @@ export default {
       },
       products: {
         data: [],
-        name: 'product',
+        name: "product",
         title: "san pham",
         search: this.searchProducts,
         reset: this.resetProducts,
         setItem: this.setSpecificProduct_,
-        getSpecificItem: this.getSpecificProduct,
         showDetail: this.showDetailUpdateProduct,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
@@ -54,19 +52,31 @@ export default {
     };
   },
   methods: {
-    ...mapActions("user", ["searchUser","setSpecificUser"]),
-    ...mapGetters("user", ["getUsers", "getUserSearched","getSpecificUser"]),
-    ...mapActions("product", ["searchProduct","setSpecificProduct"]),
-    ...mapGetters("product", ["getProducts", "getProductSearched","getSpecificProduct"]),
+    ...mapActions("user", ["searchUser"]),
+    ...mapGetters("user", [
+      "getUsers",
+      "getUserSearched",
+    ]),
+    ...mapActions("product", ["searchProduct"]),
+    ...mapGetters("product", ["getProducts", "getProductSearched"]),
+
     setItem() {
       let { name } = this.$route.params;
       if (name === "user") {
-        this.users.data = this.getUsers();
-        this.objData = this.users;
+        this.setDataUser();
       } else {
-        this.products.data = this.getProducts();
-        this.objData = this.products;
+        this.setDataProduct()
       }
+    },
+
+    setDataUser() {
+      this.users.data = this.getUsers();
+      this.objData = this.users;
+    },
+
+    setDataProduct() {
+      this.products.data = this.getProducts();
+      this.objData = this.products;
     },
 
     searchProducts(valueSearch) {
@@ -95,31 +105,33 @@ export default {
       this.objData = this.users;
     },
 
-    setSpecificProduct_(product){
-      this.setSpecificProduct(product)
+    setSpecificProduct_(product) {
+      localStorage.setItem("product", JSON.stringify(product));
     },
 
-    setSpecificUser_(user){
-      this.setSpecificUser(user)
+    setSpecificUser_(user) {
+      localStorage.setItem("user", JSON.stringify(user));
     },
 
-    showDetailUpdateProduct(id){
-      this.$router.push('product/update-product/'+id)
+    showDetailUpdateProduct(id) {
+      this.$router.push("product/update-product/" + id);
     },
 
-    showDetailUpdateUser(id){
-      this.$router.push('user/update-user/'+id)
-    }
-    
+    showDetailUpdateUser(id) {
+      this.$router.push("user/update-user/" + id);
+    },
   },
   created() {
     this.setItem();
   },
+
   beforeRouteLeave(to, from, next) {
     let condition = 1;
-    if (condition < 0) { console.log(to + " " + from + " " + next); }
+    if (condition < 0) {
+      console.log(to + " " + from + " " + next);
+    }
     this.setItem();
-    next()
-  }
+    next();
+  },
 };
 </script>
