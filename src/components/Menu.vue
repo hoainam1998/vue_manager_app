@@ -3,9 +3,11 @@
     <img src="../assets/logo.png" alt="logo" />
     <ul class="main_list">
       <li>
-        <span >Cai dat<i class="fas fa-caret-down"></i></span>
+        <span>Cai dat<i class="fas fa-caret-down"></i></span>
         <ul class="sub_list">
-          <li v-if="show"><router-link to="/home/user" >Nguoi dung</router-link></li>
+          <li v-if="show">
+            <router-link to="/home/user">Nguoi dung</router-link>
+          </li>
           <li><router-link to="/home/product">San pham</router-link></li>
         </ul>
       </li>
@@ -16,17 +18,17 @@
 <script>
 export default {
   name: "Menu",
-  data(){
+  data() {
     return {
-      show:false
+      show: false,
+    };
+  },
+  created() {
+    let user = JSON.parse(sessionStorage.getItem("user_authen"));
+    if (user.admin) {
+      this.show = true;
     }
   },
-  created(){
-    let user=JSON.parse(sessionStorage.getItem('user_authen'))
-    if(user.admin){
-      this.show=true
-    }
-  }
 };
 </script>
 <style scoped>
@@ -67,8 +69,8 @@ export default {
   padding: 10px 0;
 }
 
-.main_list >li:first-child {
-    padding:0;
+.main_list > li:first-child {
+  padding: 0;
 }
 
 .fa-caret-down {

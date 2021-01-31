@@ -13,7 +13,8 @@ const getters = {
 const actions = {
     async setProducts({ commit }) {
         try {
-            let res = await axios.get('./product.json')
+            let res = await axios.get(`/product.json`)
+            console.log('set product')
             commit('setProducts', res.data)
         } catch (err) { console.log(err.message) }
     },

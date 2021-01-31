@@ -7,19 +7,18 @@ const state = {
 const getters = {
     getUsers: (state) => (state.users),
     getUserSearched: (state) => (state.listUserSearched),
-    getUserReload: (state) => (state.userReload)
 }
 
 const actions = {
     async setUsers({ commit }) {
         try {
-            let res = await axios.get('./user.json');
+            let res = await axios.get(`/user.json`);
+            console.log('set users')
             commit('setUsers', res.data)
         } catch (err) { console.log(err.message) }
     },
 
     addUser({ commit }, user) {
-        console.log(user)
         commit('addUser', user)
     },
 
@@ -29,10 +28,6 @@ const actions = {
 
     searchUser({ commit }, search) {
         commit('searchUser', search)
-    },
-
-    setReload({commit}){
-        commit('reload')
     }
 }
 

@@ -56,7 +56,7 @@
         <div>
           <b-button type="submit" variant="success">Submit</b-button>
           <b-button class="ml-2" variant="success"
-            ><router-link to="/home/user">Huy</router-link></b-button
+            ><router-link to="/home/product">Huy</router-link></b-button
           >
         </div>
       </div>
@@ -65,6 +65,7 @@
 </template>
 <script>
 import { validationMixin } from "vuelidate";
+import GetDate from '../get_date_mixin';
 import {
   required,
   minLength,
@@ -85,7 +86,7 @@ export default {
       disabled: false,
     };
   },
-  mixins: [validationMixin],
+  mixins: [validationMixin,GetDate],
   validations: {
     sanpham: {
       tensanpham: {
@@ -95,7 +96,7 @@ export default {
       gia: {
         required,
         minLength: minLength(4),
-        maxLength: maxLength(7),
+        maxLength: maxLength(8),
         numeric,
       },
     },
@@ -117,13 +118,14 @@ export default {
         trangthai: this.sanpham.trangthai,
       };
       this.addProduct(product);
-    },    
+    },
 
-    save(){
-      if(this.disabled){
+    save() {
+      if (this.disabled) {
+        this.sanpham.ngaycapnhapganday = this.getDate();
         this.updateProduct(this.sanpham);
-      }else {
-        this.createProduct()
+      } else {
+        this.createProduct();
       }
     },
 
@@ -132,35 +134,22 @@ export default {
       if (this.$v.sanpham.$anyError) {
         return;
       }
-      this.save()
-      this.$router.push('/home/product')
-    },
-
-    getDate() {
-      let date = new Date();
-      let day =
-        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()},` +
-        `${date.toLocaleString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: true,
-        })}`;
-      return day;
-    },
-  },
-
-  created() {
-    let sanpham=JSON.parse(localStorage.getItem('product'));
-
-    if(sanpham){
-      this.sanpham=sanpham;
-      this.disabled=true
+      this.save();
+      this.$router.push("/home/product");
     }
   },
 
+  created() {
+    let sanpham = JSON.parse(localStorage.getItem("product"));
+    if (sanpham) {
+      this.sanpham = sanpham;
+      this.disabled = true;
+    }
+
+  },
+
   beforeDestroy() {
-    localStorage.removeItem('product')
+    localStorage.removeItem("product");
   },
 };
 </script>

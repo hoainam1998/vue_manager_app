@@ -85,12 +85,14 @@
 
 <script>
 import { validationMixin } from "vuelidate";
+import GetDate from "../get_date_mixin";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import { createNamespacedHelpers } from "vuex";
 const { mapActions, mapGetters } = createNamespacedHelpers("user");
 import { v4 } from "uuid";
 export default {
   name: "UserForm",
+  mixins: [validationMixin, GetDate],
   data() {
     return {
       user: {
@@ -102,7 +104,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["addUser", "setSpecificUser", "updateUser","setUsers","setReload"]),
+    ...mapActions(["addUser", "setSpecificUser", "updateUser", "setUsers"]),
     ...mapGetters(["getSpecificUser"]),
     validateState(name) {
       if (name === "ho" || name === "ten") {
@@ -119,9 +121,7 @@ export default {
       if (this.$v.user.$anyError) {
         return;
       }
-
       this.save();
-      this.setReload();
     },
     save() {
       try {
@@ -132,30 +132,20 @@ export default {
         }
         this.$router.push("/home/user");
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     },
 
     createUser() {
-      let date = new Date();
-      let day =
-        `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} , ` +
-        `${date.toLocaleString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: true,
-        })}`;
       const user_obj = {
         id: v4(),
         power: "user",
         tendangnhap: this.user.tendangnhap,
         matkhau: "123456",
         tendaydu: this.user.tendaydu,
-        ngayduoctao: day,
+        ngayduoctao: this.getDate(),
         trangthai: this.user.trangthai,
       };
-
       this.addUser(user_obj);
     },
 
@@ -173,13 +163,12 @@ export default {
   beforeDestroy() {
     localStorage.removeItem("user");
   },
-  mixins: [validationMixin],
   validations: {
     user: {
       tendangnhap: {
         required,
         minLength: minLength(4),
-        maxLength: maxLength(15),
+        maxLength: maxLength(15)
       },
       tendaydu: {
         ten: {
@@ -213,5 +202,4 @@ export default {
   grid-row: 2;
   grid-column: 2;
 }
-
 </style>
