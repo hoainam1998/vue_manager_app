@@ -32,7 +32,7 @@ const router = new Router({
             meta: { requiresAuth: true },
             children: [
                 {
-                    path: ':name',
+                    path: 'user',
                     component: User,
                     name: "user",
                     meta: { requiresAuth: true, is_admin: true },
@@ -41,21 +41,24 @@ const router = new Router({
                             path: '',
                             name: 'user_table',
                             component: ContainerTable,
+                            meta: { requiresAuth: true, is_admin: true },
                         },
                         { 
                             name: 'create-user',
                             path: 'create-user',
                             component: UserForm,
+                            meta: { requiresAuth: true, is_admin: true },
                         },
                         { 
                             name: 'update-user',
                             path: 'update-user/:id',
                             component: UserForm,
+                            meta: { requiresAuth: true, is_admin: true },
                         }
                     ]
                 },
                 {
-                    path: ':name',
+                    path: 'product',
                     name: 'product',
                     component: Product,
                     meta: { requiresAuth: true },
@@ -64,6 +67,7 @@ const router = new Router({
                             path: '',
                             name: "product_table",
                             component: ContainerTable,
+                            meta: { requiresAuth: true },
                         },
                         {
                             name: "create-product",
@@ -103,6 +107,8 @@ router.beforeEach((to, from, next) => {
 
         if (user) {
             if (!user.admin && to.meta.is_admin) {
+                console.log(to.fullPath+" "+user.admin+" "+to.meta.is_admin)
+            
                 next('/404')
             }
         }

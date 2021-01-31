@@ -15,7 +15,8 @@
             name="tendanhnhap"
             placeholder="vd:hoainam"
             v-model="user.tendangnhap"
-            required
+            required 
+            autocomplete="on"
           />
         </div>
         <div>

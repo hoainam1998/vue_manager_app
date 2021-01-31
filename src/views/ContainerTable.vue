@@ -47,7 +47,6 @@ export default {
           { key: "thaotac", label: "Thao Tac" },
         ],
       },
-
       objData: {},
     };
   },
@@ -61,8 +60,8 @@ export default {
     ...mapGetters("product", ["getProducts", "getProductSearched"]),
 
     setItem() {
-      let { name } = this.$route.params;
-      if (name === "user") {
+      let  path  = this.$route.path;
+      if (path === "/home/user") {
         this.setDataUser();
       } else {
         this.setDataProduct()
