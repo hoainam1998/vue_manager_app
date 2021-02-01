@@ -1,6 +1,5 @@
 <template>
   <section class="content">
-    <!-- @submit.prevent="handleSubmit" -->
     <b-form @submit.stop.prevent="handleSubmit">
       <div class="layout_form title_form">
         <b-form-group

@@ -2,12 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Login from './views/Login'
-import ContainerTable from './views/ContainerTable'
+import PageNotFound from './views/404'
 import User from './views/User_board'
+import User_Table from './views/User'
 import UserForm from './views/UserForm'
 import Product from './views/Product_board'
+import Product_Table from './views/Product'
 import ProductForm from './views/ProductForm'
-import PageNotFound from './views/404'
 Vue.use(Router)
 
 const router = new Router({
@@ -40,7 +41,7 @@ const router = new Router({
                         {
                             path: '',
                             name: 'user_table',
-                            component: ContainerTable,
+                            component: User_Table,
                             meta: { requiresAuth: true, is_admin: true },
                         },
                         { 
@@ -66,7 +67,7 @@ const router = new Router({
                         {
                             path: '',
                             name: "product_table",
-                            component: ContainerTable,
+                            component: Product_Table,
                             meta: { requiresAuth: true },
                         },
                         {
@@ -107,8 +108,6 @@ router.beforeEach((to, from, next) => {
 
         if (user) {
             if (!user.admin && to.meta.is_admin) {
-                console.log(to.fullPath+" "+user.admin+" "+to.meta.is_admin)
-            
                 next('/404')
             }
         }

@@ -1,6 +1,5 @@
 <template>
   <section class="content">
-    <!-- @submit.prevent="handleSubmit" -->
     <b-form @submit.stop.prevent="handleSubmit">
       <div class="layout_form title_form">
         <b-form-group
@@ -103,6 +102,28 @@ export default {
       disabled: false,
     };
   },
+  validations: {
+    user: {
+      tendangnhap: {
+        required,
+        minLength: minLength(4),
+        maxLength: maxLength(15)
+      },
+      tendaydu: {
+        ten: {
+          required,
+          minLength: minLength(2),
+          maxLength: maxLength(15),
+        },
+        ho: {
+          required,
+          minLength: minLength(2),
+          maxLength: maxLength(6),
+        },
+      },
+    },
+  },
+
   methods: {
     ...mapActions(["addUser", "setSpecificUser", "updateUser", "setUsers"]),
     ...mapGetters(["getSpecificUser"]),
@@ -153,6 +174,7 @@ export default {
       this.updateUser(this.user);
     },
   },
+
   created() {
     let user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -160,30 +182,10 @@ export default {
       this.disabled = true;
     }
   },
+
   beforeDestroy() {
     localStorage.removeItem("user");
-  },
-  validations: {
-    user: {
-      tendangnhap: {
-        required,
-        minLength: minLength(4),
-        maxLength: maxLength(15)
-      },
-      tendaydu: {
-        ten: {
-          required,
-          minLength: minLength(2),
-          maxLength: maxLength(15),
-        },
-        ho: {
-          required,
-          minLength: minLength(2),
-          maxLength: maxLength(6),
-        },
-      },
-    },
-  },
+  }
 };
 </script>
 <style scoped>
