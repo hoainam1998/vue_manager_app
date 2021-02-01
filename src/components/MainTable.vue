@@ -1,19 +1,17 @@
-clear<template>
+<template>
   <section class="content">
     <div class="manipulation">
       <div>
         <h2>Danh sach {{ objData.title }}</h2>
-        <b-button variant="success" v-if="show_">
-          <router-link :to="`${objData.name}/create-${objData.name}`">
-            Tao {{ objData.title }}</router-link
-          >
-        </b-button>
+        <!-- button create-->
+        <slot name="create" v-bind:data="objData" v-if="is_admin"></slot>
+        <!-- button create-->
       </div>
       <div class="mb-3">
         <b-form-select :options="options" v-model="perPage"></b-form-select>
         <form @submit.prevent="searchItem">
           <b-input-group prepend="Ten day du" class="mt-3">
-            <b-form-input id="search"></b-form-input>
+            <b-form-input v-model="search_value"></b-form-input>
             <b-input-group-append>
               <b-button variant="outline-success" type="submit"
                 >Tim kiem</b-button
@@ -28,31 +26,30 @@ clear<template>
     <b-table
       id="my-table"
       :items="objData.data"
-      :fields="fields_visible(objData.fields)"
+      :fields="objData.fields"
       :per-page="perPage"
       :current-page="currentPage"
       small
     >
+      <template #cell(tendaydu)="data">
+        {{data.value.ho}}{{data.value.ten}}
+      </template>
       <template #cell(gia)="data">
         {{
-          parseInt(data.value).toLocaleString("it-IT", {
+          data.value.toLocaleString("it-IT", {
             style: "currency",
             currency: "VND",
           })
         }}
       </template>
-
-      <template #cell(tendaydu)="data">
-        {{ data.value.ho }} {{ data.value.ten }}
-      </template>
-
-      <template #cell(thaotac)="row">
+      <template #cell(thaotac)="row" v-if="is_admin">
         <button class="update" @click="show(row.item)">
           <i class="fas fa-edit"></i>
         </button>
       </template>
     </b-table>
     <!-- table -->
+
     <div class="pagination_table">
       <div>
         <span>{{ currentPage }}</span>
@@ -73,7 +70,18 @@ clear<template>
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "MainTable",
-  props: ["objData"],
+  props: {
+    objData: {
+      data: Array,
+      name: String,
+      title: String,
+      search: Function,
+      reset: Function,
+      setItem: Function,
+      showDetail: Function,
+      fields: Array,
+    },
+  },
   data() {
     return {
       perPage: 20,
@@ -83,7 +91,8 @@ export default {
         { value: 100, text: "100" },
       ],
       currentPage: 1,
-      show_: false,
+      search_value: "",
+      is_admin: false,
     };
   },
   computed: {
@@ -99,35 +108,26 @@ export default {
     ...mapGetters("user", ["getUsers", "getUserSearched"]),
     ...mapActions("product", ["searchProduct"]),
     ...mapGetters("product", ["getListProductSearch", "getProducts"]),
+
     show(item) {
       this.objData.setItem(item);
       this.objData.showDetail(item.id);
     },
 
     searchItem() {
-      let value_search = document.querySelector("#search").value;
-      this.objData.search(value_search);
-      document.querySelector("#search").value=''
+      this.objData.search(this.search_value);
+      this.search_value = "";
     },
-
     reset() {
       this.objData.reset();
-    },
-
-    fields_visible(fields) {
-      let user = JSON.parse(sessionStorage.getItem("user_authen"));
-      if (!user.admin) {
-        return fields.filter((item) => item.key !== "thaotac");
-      }
-      return fields;
-    },
+    }
   },
   created() {
     let user = JSON.parse(sessionStorage.getItem("user_authen"));
     if (user.admin) {
-      this.show_ = true;
+      this.is_admin = true;
     }
-  },
+  }
 };
 </script>
 <style scoped>
