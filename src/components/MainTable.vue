@@ -4,7 +4,11 @@
       <div>
         <h2>Danh sach {{ objData.title }}</h2>
         <!-- button create-->
-        <slot name="create" v-bind:data="objData" v-if="is_admin"></slot>
+        <b-button variant="success" v-if="is_admin">
+          <router-link :to="`${objData.name}/create-${objData.name}`">
+            Tao {{ objData.title }}</router-link
+          >
+        </b-button>
         <!-- button create-->
       </div>
       <div class="mb-3">
@@ -24,28 +28,25 @@
     </div>
     <!-- table -->
     <b-table
-      id="my-table"
       :items="objData.data"
       :fields="objData.fields"
-      :per-page="perPage"
-      :current-page="currentPage"
-      small
+      :perPage="perPage"
+      :currentPage="currentPage"
+      v-bind="$attrs"
+      v-on="$listeners"
+      custom-prop="any"
     >
-      <template #cell(tendaydu)="data">
-        {{data.value.ho}}{{data.value.ten}}
-      </template>
-      <template #cell(gia)="data">
-        {{
-          data.value.toLocaleString("it-IT", {
-            style: "currency",
-            currency: "VND",
-          })
-        }}
-      </template>
-      <template #cell(thaotac)="row" v-if="is_admin">
-        <button class="update" @click="show(row.item)">
+      <template #cell(thaotac)="data" v-if="is_admin">
+        <button class="update" @click="show(data.item)">
           <i class="fas fa-edit"></i>
         </button>
+      </template>
+
+      <template
+        v-for="(_, name) in $scopedSlots"
+        v-slot:[name]="slotData"
+      >
+        <slot :name="name" v-bind="slotData" />
       </template>
     </b-table>
     <!-- table -->
@@ -80,17 +81,20 @@ export default {
       setItem: Function,
       showDetail: Function,
       fields: Array,
-    },
+    }
+  },
+  mounted(){
+    console.log(this.$scopedSlots)
   },
   data() {
     return {
       perPage: 20,
+      currentPage: 1,
       options: [
         { value: 20, text: "20" },
         { value: 50, text: "50" },
         { value: 100, text: "100" },
       ],
-      currentPage: 1,
       search_value: "",
       is_admin: false,
     };
@@ -120,14 +124,20 @@ export default {
     },
     reset() {
       this.objData.reset();
-    }
+    },
   },
   created() {
     let user = JSON.parse(sessionStorage.getItem("user_authen"));
     if (user.admin) {
       this.is_admin = true;
     }
-  }
+
+    if (!user.admin) {
+      this.objData.fields = this.objData.fields.filter(
+        (item) => item.key !== "thaotac"
+      );
+    }
+  },
 };
 </script>
 <style scoped>

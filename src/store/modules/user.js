@@ -13,7 +13,6 @@ const actions = {
     async setUsers({ commit }) {
         try {
             let res = await axios.get(`/user.json`);
-            console.log('set users')
             commit('setUsers', res.data)
         } catch (err) { console.log(err.message) }
     },
