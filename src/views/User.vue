@@ -1,18 +1,13 @@
 <template>
   <MainTable :objData="users">
-    <template v-slot:create="{ data }">
-      <b-button variant="success">
-        <router-link :to="`${data.name}/create-${data.name}`">
-          Tao {{ data.title }}</router-link
-        >
-      </b-button>
+    <template #cell(tendaydu)="data">
+        {{ data.value.ho }} {{ data.value.ten }}
     </template>
   </MainTable>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
 import MainTable from "../components/MainTable";
-
 export default {
   name: "Container",
   components: {
@@ -35,7 +30,7 @@ export default {
           { key: "ngayduoctao", label: "Ngày Được Tạo" },
           { key: "trangthai", label: "Trạng Thái" },
           { key: "thaotac", label: "Thao Tác" },
-        ],
+        ]
       },
     };
   },

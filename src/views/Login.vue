@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions,mapGetters } from "vuex";
 export default {
   name: "Login",
   data() {
@@ -44,9 +44,10 @@ export default {
   },
   methods: {
     ...mapActions("user", ["setUsers"]),
+    ...mapGetters('user',['getUsers']),
     handleSubmit() {
       let errs = [];
-      let list_user_authen = this.$store.getters["user/getUsers"];
+      let list_user_authen = this.getUsers();
       const tendangnhap_exist = list_user_authen.findIndex(
         (user) => user.tendangnhap === this.user.tendangnhap
       );
@@ -102,6 +103,8 @@ export default {
   left: 50%;
   width: 20%;
   transform: translate(-50%, -50%);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 5px;
 }
 
 .login_form img {

@@ -3,13 +3,15 @@
     <img src="../assets/logo.png" alt="logo" />
     <ul class="main_list">
       <li>
-        <span>Cai dat<i class="fas fa-caret-down"></i></span>
+        <span v-b-toggle.collapse-1 class="toggle_link">Cai dat<i class="fas fa-caret-down"></i></span>
+        <b-collapse id="collapse-1">
         <ul class="sub_list">
           <li v-if="show">
             <router-link to="/home/user">Nguoi dung</router-link>
           </li>
           <li><router-link to="/home/product">San pham</router-link></li>
         </ul>
+        </b-collapse>
       </li>
       <li>Quan li</li>
     </ul>
@@ -80,5 +82,9 @@ export default {
 .sub_list a {
   color: white;
   text-decoration: none;
+}
+
+.toggle_link {
+  outline: none;
 }
 </style>

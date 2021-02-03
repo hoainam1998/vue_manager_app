@@ -1,11 +1,12 @@
 <template>
   <MainTable :objData="products">
-    <template v-slot:create="{ data }">
-      <b-button variant="success">
-        <router-link :to="`${data.name}/create-${data.name}`">
-          Tao {{ data.title }}</router-link
-        >
-      </b-button>
+    <template #cell(gia)="data">
+      {{
+        parseInt(data.value).toLocaleString("it-IT", {
+          style: "currency",
+          currency: "VND",
+        })
+      }}
     </template>
   </MainTable>
 </template>
@@ -15,7 +16,7 @@ import MainTable from "../components/MainTable";
 export default {
   name: "Product",
   components: {
-    MainTable,
+    MainTable
   },
   data() {
     return {
@@ -64,7 +65,7 @@ export default {
 
     showDetailUpdateProduct(id) {
       this.$router.push("product/update-product/" + id);
-    },
+    }
   },
   created() {
     this.setDataProduct();
