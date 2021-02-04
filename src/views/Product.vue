@@ -4,7 +4,7 @@
       {{
         parseInt(data.value).toLocaleString("it-IT", {
           style: "currency",
-          currency: "VND",
+          currency: "VND"
         })
       }}
     </template>
@@ -15,9 +15,7 @@ import { mapActions, mapGetters } from "vuex";
 import MainTable from "../components/MainTable";
 export default {
   name: "Product",
-  components: {
-    MainTable
-  },
+  components: { MainTable },
   data() {
     return {
       products: {
@@ -28,6 +26,7 @@ export default {
         reset: this.resetProducts,
         setItem: this.setSpecificProduct_,
         showDetail: this.showDetailUpdateProduct,
+        getValueAfterLoaded: this.getValueAfterLoaded_,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
           { key: "tensanpham", label: "Tên Sản Phẩm" },
@@ -41,8 +40,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions("product", ["searchProduct"]),
-    ...mapGetters("product", ["getProducts", "getProductSearched"]),
+    ...mapActions("product", ["searchProduct","setProduct"]),
+    ...mapGetters("product", ["getProducts", "getProductSearched","getValueAfterLoaded"]),
 
     setDataProduct() {
       this.products.data = this.getProducts();
@@ -60,7 +59,7 @@ export default {
     },
 
     setSpecificProduct_(product) {
-      localStorage.setItem("product", JSON.stringify(product));
+     this.setProduct(product);
     },
 
     showDetailUpdateProduct(id) {
@@ -70,6 +69,10 @@ export default {
   created() {
     this.setDataProduct();
   },
+
+   getValueAfterLoaded_(){
+      this.getValueAfterLoaded();
+    }
 };
 </script>
 <style scoped>

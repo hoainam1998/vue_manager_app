@@ -2,19 +2,31 @@ import axios from 'axios'
 const state = {
     users: [],
     listUserSearched: [],
+    user: null,
+    is_loaded: false
 }
 
 const getters = {
     getUsers: (state) => (state.users),
     getUserSearched: (state) => (state.listUserSearched),
+    getUser: (state)=>(state.user),
+    getValueAfterLoaded:(state)=>(state.is_loaded)
 }
 
 const actions = {
-    async setUsers({ commit }) {
-        try {
-            let res = await axios.get(`/user.json`);
-            commit('setUsers', res.data)
-        } catch (err) { console.log(err.message) }
+    setUsers({ commit }) {
+        axios.get(`/user.json`)
+            .then(res => commit('setUsers', res.data))
+            .catch(err => console.log(err.message))
+    },
+
+    setUserById({commit},id){
+        let user=state.users.find(item=>item.id.toString()===id)
+        commit('setUser',user);
+    },
+
+    setUser({commit},user){
+        commit('setUser',user)
     },
 
     addUser({ commit }, user) {
@@ -31,16 +43,23 @@ const actions = {
 }
 
 const mutations = {
-    setUsers: (state,users) => {state.users=users},
+    setUsers: (state, users) => {
+        state.users = users
+        state.is_loaded=true;
+    },
 
-    addUser: (state,user)=> {
+    setUser:(state,user)=>{
+        state.user=user
+    },
+
+    addUser: (state, user) => {
         state.users.unshift(user);
     },
 
     updateUser: (state, user) => {
-        let index=state.users.findIndex(item=>item.id===user.id);
-        state.users.splice(index,1)
-        state.users.splice(index,0,user)
+        let index = state.users.findIndex(item => item.id === user.id);
+        state.users.splice(index, 1)
+        state.users.splice(index, 0, user)
     },
 
     searchUser: (state, value_search) => {

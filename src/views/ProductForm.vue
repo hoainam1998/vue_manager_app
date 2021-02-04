@@ -53,7 +53,9 @@
           Trang thai
         </b-form-checkbox>
         <div>
-          <b-button type="submit" variant="success">Submit</b-button>
+          <b-button type="submit" variant="success">{{
+            disabled ? "Cap nhap" : "Tao"
+          }}</b-button>
           <b-button class="ml-2" variant="success"
             ><router-link to="/home/product">Huy</router-link></b-button
           >
@@ -64,14 +66,14 @@
 </template>
 <script>
 import { validationMixin } from "vuelidate";
-import GetDate from '../get_date_mixin';
+import GetDate from "../get_date_mixin";
 import {
   required,
   minLength,
   maxLength,
   numeric,
 } from "vuelidate/lib/validators";
-import { mapActions } from "vuex";
+import { mapActions , mapGetters } from "vuex";
 import { v4 } from "uuid";
 export default {
   name: "Create_Product",
@@ -85,7 +87,7 @@ export default {
       disabled: false,
     };
   },
-  mixins: [validationMixin,GetDate],
+  mixins: [validationMixin, GetDate],
   validations: {
     sanpham: {
       tensanpham: {
@@ -98,10 +100,11 @@ export default {
         maxLength: maxLength(8),
         numeric,
       },
-    },
+    }
   },
   methods: {
-    ...mapActions("product", ["addProduct", "updateProduct"]),
+    ...mapActions("product", ["addProduct", "updateProduct","setProductById"]),
+    ...mapGetters('product',['getProduct']),
     validateState(name) {
       const { $dirty, $error } = this.$v.sanpham[name];
       return $dirty ? !$error : null;
@@ -135,20 +138,26 @@ export default {
       }
       this.save();
       this.$router.push("/home/product");
+    },
+
+    getProductById(){
+      let product=this.getProduct();
+      if(this.$route.params.id && product===null){
+        this.setProductById(this.$route.params.id)
+      }
     }
   },
-
   created() {
-    let sanpham = JSON.parse(localStorage.getItem("product"));
+    this.getProductById();
+    let sanpham=this.getProduct();
     if (sanpham) {
       this.sanpham = sanpham;
       this.disabled = true;
     }
-
   },
 
   beforeDestroy() {
-    localStorage.removeItem("product");
+    localStorage.removeItem("product")
   },
 };
 </script>

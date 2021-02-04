@@ -83,9 +83,6 @@ export default {
       fields: Array,
     }
   },
-  mounted(){
-    console.log(this.$scopedSlots)
-  },
   data() {
     return {
       perPage: 20,
@@ -96,7 +93,7 @@ export default {
         { value: 100, text: "100" },
       ],
       search_value: "",
-      is_admin: false,
+      is_admin: false
     };
   },
   computed: {
@@ -122,9 +119,10 @@ export default {
       this.objData.search(this.search_value);
       this.search_value = "";
     },
+
     reset() {
       this.objData.reset();
-    },
+    }
   },
   created() {
     let user = JSON.parse(sessionStorage.getItem("user_authen"));
