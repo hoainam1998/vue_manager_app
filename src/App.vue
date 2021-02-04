@@ -1,28 +1,30 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import { mapActions } from "vuex";
 export default {
-  name: 'App',
-  methods:{
-    ...mapActions('user',['setUsers']),
-    ...mapActions('product',['setProducts']),
+  name: "App",
+  methods: {
+    ...mapActions("user", ["setUsers"]),
+    ...mapActions("product", ["setProducts"]),
   },
-  async created(){
-    await this.setUsers();
-    await this.setProducts();
-    console.log('app init')
-  }
-}
+  created() {
+    this.setUsers()
+    this.setProducts()
+  },
+};
 </script>
 
 <style>
-*,*:before,*:after {
-  margin: 0 ; padding: 0;
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -47,7 +49,7 @@ ul {
   border-radius: 5px;
 }
 
-.title_form label{
+.title_form label {
   display: block;
   color: #27ae60;
   font-weight: bold;
@@ -79,5 +81,4 @@ a:hover {
   justify-content: space-between;
   align-items: center;
 }
-
 </style>

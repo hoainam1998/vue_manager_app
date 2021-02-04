@@ -16,7 +16,7 @@
         "trangthai":"Ko hoat dong"
     },
     {
-        "id": 1,
+        "id": 3,
         "tensanpham": "Grapes",
         "ngaytao": "12/4/2020 , 3:06:55 PM",
         "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
@@ -24,7 +24,7 @@
         "trangthai":"Hoat dong"
     },
     {
-        "id": 1,
+        "id": 4,
         "tensanpham": "Strawberry",
         "ngaytao": "12/4/2020 , 3:06:55 PM",
         "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
@@ -32,8 +32,16 @@
         "trangthai":"Ko hoat dong"
     },
     {
-        "id": 1,
+        "id": 5,
         "tensanpham": "Orange",
+        "ngaytao": "12/4/2020 , 3:06:55 PM",
+        "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
+        "gia": 20000,
+        "trangthai":"Hoat dong"
+    },
+    {
+        "id": 6,
+        "tensanpham": "Orange1",
         "ngaytao": "12/4/2020 , 3:06:55 PM",
         "ngaycapnhapganday": "12/4/2020 , 3:06:55 PM",
         "gia": 20000,

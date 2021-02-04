@@ -71,8 +71,8 @@
         >
           Trang thai
         </b-form-checkbox>
-        <div>
-          <b-button type="submit" variant="success">Submit</b-button>
+        <div class="btn_group">
+          <b-button type="submit" variant="success">{{disabled?'Cap nhap':'Tao'}}</b-button>
           <b-button class="ml-2" variant="success"
             ><router-link to="/home/user">Huy</router-link></b-button
           >
@@ -81,13 +81,12 @@
     </b-form>
   </section>
 </template>
-
 <script>
 import { validationMixin } from "vuelidate";
 import GetDate from "../get_date_mixin";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import { required, minLength, maxLength } from "vuelidate/lib/validators"
 import { createNamespacedHelpers } from "vuex";
-const { mapActions, mapGetters } = createNamespacedHelpers("user");
+const { mapActions , mapGetters } = createNamespacedHelpers("user");
 import { v4 } from "uuid";
 export default {
   name: "UserForm",
@@ -121,12 +120,12 @@ export default {
           maxLength: maxLength(6),
         },
       },
-    },
+    }
   },
 
   methods: {
-    ...mapActions(["addUser", "setSpecificUser", "updateUser", "setUsers"]),
-    ...mapGetters(["getSpecificUser"]),
+    ...mapActions(["addUser", "updateUser","setUserById"]),
+    ...mapGetters(['getUser']),
     validateState(name) {
       if (name === "ho" || name === "ten") {
         const { $dirty, $error } = this.$v.user.tendaydu[name];
@@ -173,10 +172,17 @@ export default {
     updateUser_() {
       this.updateUser(this.user);
     },
-  },
 
+    getUserById(){
+      let user=this.getUser();
+      if(this.$route.params.id && user===null){
+        this.setUserById(this.$route.params.id)
+      }
+    }
+  },
   created() {
-    let user = JSON.parse(localStorage.getItem("user"));
+    this.getUserById();
+    let user = this.getUser();
     if (user) {
       this.user = user;
       this.disabled = true;
@@ -203,5 +209,9 @@ export default {
 .layout_form div:last-child {
   grid-row: 2;
   grid-column: 2;
+}
+
+.btn_group button{
+  width: 120px;
 }
 </style>

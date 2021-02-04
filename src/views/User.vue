@@ -11,7 +11,7 @@ import MainTable from "../components/MainTable";
 export default {
   name: "Container",
   components: {
-    MainTable,
+    MainTable
   },
   data() {
     return {
@@ -23,6 +23,7 @@ export default {
         reset: this.resetUsers,
         setItem: this.setSpecificUser_,
         showDetail: this.showDetailUpdateUser,
+        getValueAfterLoaded: this.getValueAfterLoaded_,
         fields: [
           { key: "id", thClass: "d-none", tdClass: "d-none" },
           { key: "tendaydu", label: "Tên Đầy Đủ" },
@@ -35,8 +36,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions("user", ["searchUser"]),
-    ...mapGetters("user", ["getUsers", "getUserSearched"]),
+    ...mapActions("user", ["searchUser","setUser"]),
+    ...mapGetters("user", ["getUsers", "getUserSearched","getValueAfterLoaded"]),
 
     setDataUser() {
       this.users.data = this.getUsers();
@@ -54,12 +55,16 @@ export default {
     },
 
     setSpecificUser_(user) {
-      localStorage.setItem("user", JSON.stringify(user));
+     this.setUser(user);
     },
 
     showDetailUpdateUser(id) {
       this.$router.push("user/update-user/" + id);
     },
+
+    getValueAfterLoaded_(){
+      this.getValueAfterLoaded();
+    }
   },
   created() {
     this.setDataUser();
