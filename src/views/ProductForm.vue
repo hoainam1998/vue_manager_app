@@ -62,6 +62,7 @@
         </div>
       </div>
     </b-form>
+    <span style="display: none">{{ is_product_loaded }}</span>
   </section>
 </template>
 <script>
@@ -73,7 +74,7 @@ import {
   maxLength,
   numeric,
 } from "vuelidate/lib/validators";
-import { mapActions , mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { v4 } from "uuid";
 export default {
   name: "Create_Product",
@@ -100,11 +101,16 @@ export default {
         maxLength: maxLength(8),
         numeric,
       },
-    }
+    },
   },
   methods: {
-    ...mapActions("product", ["addProduct", "updateProduct","setProductById"]),
-    ...mapGetters('product',['getProduct']),
+    ...mapActions("product", ["addProduct", "updateProduct", "setProductById"]),
+    ...mapGetters("product", [
+      "getProduct",
+      "get_is_product_loaded",
+      "getProducts",
+    ]),
+
     validateState(name) {
       const { $dirty, $error } = this.$v.sanpham[name];
       return $dirty ? !$error : null;
@@ -140,24 +146,37 @@ export default {
       this.$router.push("/home/product");
     },
 
-    getProductById(){
-      let product=this.getProduct();
-      if(this.$route.params.id && product===null){
-        this.setProductById(this.$route.params.id)
+    getProductById() {
+      let product = this.getProduct();
+      if (this.$route.params.id && !product) {
+        this.setProductById(this.$route.params.id);
+      }
+    },
+
+    getProduct_show() {
+      this.getProductById();
+      let sanpham = this.getProduct();
+      if (sanpham) {
+        this.sanpham = sanpham;
+        this.disabled = true;
       }
     }
   },
+  
   created() {
-    this.getProductById();
-    let sanpham=this.getProduct();
-    if (sanpham) {
-      this.sanpham = sanpham;
-      this.disabled = true;
-    }
+    this.getProduct_show();
   },
 
-  beforeDestroy() {
-    localStorage.removeItem("product")
+  updated() {
+    if (this.is_product_loaded) {
+      this.getProduct_show();
+    }
+  },
+  
+  computed: {
+    is_product_loaded() {
+      return this.get_is_product_loaded();
+    },
   },
 };
 </script>
