@@ -72,21 +72,24 @@
           Trang thai
         </b-form-checkbox>
         <div class="btn_group">
-          <b-button type="submit" variant="success">{{disabled?'Cap nhap':'Tao'}}</b-button>
+          <b-button type="submit" variant="success">{{
+            disabled ? "Cap nhap" : "Tao"
+          }}</b-button>
           <b-button class="ml-2" variant="success"
             ><router-link to="/home/user">Huy</router-link></b-button
           >
         </div>
       </div>
     </b-form>
+    <span style="display: none">{{ is_user_loaded }}</span>
   </section>
 </template>
 <script>
 import { validationMixin } from "vuelidate";
 import GetDate from "../get_date_mixin";
-import { required, minLength, maxLength } from "vuelidate/lib/validators"
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import { createNamespacedHelpers } from "vuex";
-const { mapActions , mapGetters } = createNamespacedHelpers("user");
+const { mapActions, mapGetters } = createNamespacedHelpers("user");
 import { v4 } from "uuid";
 export default {
   name: "UserForm",
@@ -106,7 +109,7 @@ export default {
       tendangnhap: {
         required,
         minLength: minLength(4),
-        maxLength: maxLength(15)
+        maxLength: maxLength(15),
       },
       tendaydu: {
         ten: {
@@ -120,12 +123,16 @@ export default {
           maxLength: maxLength(6),
         },
       },
-    }
+    },
   },
 
   methods: {
-    ...mapActions(["addUser", "updateUser","setUserById"]),
-    ...mapGetters(['getUser']),
+    ...mapActions([
+      "addUser",
+      "updateUser",
+      "setUserById"
+    ]),
+    ...mapGetters(["getUser","get_is_user_loaded"]),
     validateState(name) {
       if (name === "ho" || name === "ten") {
         const { $dirty, $error } = this.$v.user.tendaydu[name];
@@ -173,12 +180,12 @@ export default {
       this.updateUser(this.user);
     },
 
-    getUserById(){
-      let user=this.getUser();
-      if(this.$route.params.id && user===null){
-        this.setUserById(this.$route.params.id)
+    getUserById() {
+      let user = this.getUser();
+      if (this.$route.params.id && !user) {
+        this.setUserById(this.$route.params.id);
       }
-    }
+    },
   },
   created() {
     this.getUserById();
@@ -188,10 +195,21 @@ export default {
       this.disabled = true;
     }
   },
-
-  beforeDestroy() {
-    localStorage.removeItem("user");
-  }
+  updated() {
+    if (this.is_user_loaded) {
+      this.getUserById();
+      let user = this.getUser();
+      if (user) {
+        this.user = user;
+        this.disabled = true;
+      }
+    }
+  },
+  computed: {
+    is_user_loaded() {
+      return this.get_is_user_loaded();
+    },
+  },
 };
 </script>
 <style scoped>
@@ -211,7 +229,7 @@ export default {
   grid-column: 2;
 }
 
-.btn_group button{
+.btn_group button {
   width: 120px;
 }
 </style>

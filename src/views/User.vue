@@ -1,5 +1,5 @@
 <template>
-  <MainTable :objData="users">
+  <MainTable :objData="users" :items="this.getUser_">
     <template #cell(tendaydu)="data">
         {{ data.value.ho }} {{ data.value.ten }}
     </template>
@@ -16,7 +16,6 @@ export default {
   data() {
     return {
       users: {
-        data: [],
         name: "user",
         title: "nguoi dung",
         search: this.searchUsers,
@@ -34,6 +33,11 @@ export default {
         ]
       },
     };
+  },
+  computed:{
+    getUser_(){
+      return this.getUsers()
+    }
   },
   methods: {
     ...mapActions("user", ["searchUser","setUser"]),
@@ -60,10 +64,6 @@ export default {
 
     showDetailUpdateUser(id) {
       this.$router.push("user/update-user/" + id);
-    },
-
-    getValueAfterLoaded_(){
-      this.getValueAfterLoaded();
     }
   },
   created() {

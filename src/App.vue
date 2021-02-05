@@ -15,7 +15,7 @@ export default {
   created() {
     this.setUsers()
     this.setProducts()
-  },
+  }
 };
 </script>
 

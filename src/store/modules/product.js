@@ -3,32 +3,34 @@ const state = {
     products: [],
     listProductSearch: [],
     product: null,
-    is_loaded: false
+    is_product_loaded: false
 };
 
 const getters = {
     getProducts: (state) => (state.products),
     getProductSearched: (state) => (state.listProductSearch),
-    getProduct:(state)=>(state.product),
-    getValueAfterLoaded:(state)=>(state.is_loaded)
+    getProduct: (state) => (state.product),
+    get_is_product_loaded: (state) => (state.is_product_loaded)
 }
 
 const actions = {
     setProducts({ commit }) {
         axios.get(`/product.json`)
             .then(res => {
-                    commit('setProducts', res.data)        
+                setTimeout(() => {
+                    commit('setProducts', res.data)
+                }, 10000)
             })
             .catch(err => console.log(err.message))
     },
 
-    setProduct({commit},product){
-        commit('setProduct',product)
+    setProduct({ commit }, product) {
+        commit('setProduct', product)
     },
 
-    setProductById({commit},id){
-        let product=state.products.find(item=>item.id.toString()===id)
-        commit('setProduct',product)
+    setProductById({ commit }, id) {
+        let product = state.products.find(item => item.id.toString() === id)
+        commit('setProduct', product)
     },
 
     setSpecificProduct({ commit }, product) {
@@ -51,11 +53,11 @@ const actions = {
 const mutations = {
     setProducts: (state, products) => {
         state.products = products
-        state.is_loaded= true
+        state.is_product_loaded=true
     },
 
-    setProduct:(state,product)=>{
-        state.product=product
+    setProduct: (state, product) => {
+        state.product = product
     },
 
     addProduct: (state, product) => {

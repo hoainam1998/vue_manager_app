@@ -1,5 +1,5 @@
 <template>
-  <MainTable :objData="products">
+  <MainTable :objData="products" :items="getProducts_">
     <template #cell(gia)="data">
       {{
         parseInt(data.value).toLocaleString("it-IT", {
@@ -19,7 +19,6 @@ export default {
   data() {
     return {
       products: {
-        data: [],
         name: "product",
         title: "san pham",
         search: this.searchProducts,
@@ -39,12 +38,18 @@ export default {
       },
     };
   },
+  computed:{
+    getProducts_(){
+      return this.getProducts();
+    }
+  },
   methods: {
     ...mapActions("product", ["searchProduct","setProduct"]),
     ...mapGetters("product", ["getProducts", "getProductSearched","getValueAfterLoaded"]),
 
     setDataProduct() {
       this.products.data = this.getProducts();
+      //this.setProduct.then(res => this.products.data = res);
     },
 
     searchProducts(valueSearch) {
@@ -68,11 +73,7 @@ export default {
   },
   created() {
     this.setDataProduct();
-  },
-
-   getValueAfterLoaded_(){
-      this.getValueAfterLoaded();
-    }
+  }
 };
 </script>
 <style scoped>

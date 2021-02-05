@@ -26,9 +26,10 @@
         </form>
       </div>
     </div>
+
     <!-- table -->
     <b-table
-      :items="objData.data"
+      :items="items"
       :fields="objData.fields"
       :perPage="perPage"
       :currentPage="currentPage"
@@ -68,20 +69,19 @@
   </section>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
 export default {
   name: "MainTable",
   props: {
     objData: {
-      data: Array,
       name: String,
       title: String,
       search: Function,
       reset: Function,
       setItem: Function,
       showDetail: Function,
-      fields: Array,
-    }
+      fields: Array
+    },
+    items: Array
   },
   data() {
     return {
@@ -102,14 +102,9 @@ export default {
     },
     totalPage() {
       return Math.ceil(this.objData.data.length / this.perPage);
-    },
+    }
   },
   methods: {
-    ...mapActions("user", ["setUsers", "setSpecificUser", "searchUser"]),
-    ...mapGetters("user", ["getUsers", "getUserSearched"]),
-    ...mapActions("product", ["searchProduct"]),
-    ...mapGetters("product", ["getListProductSearch", "getProducts"]),
-
     show(item) {
       this.objData.setItem(item);
       this.objData.showDetail(item.id);
@@ -135,7 +130,7 @@ export default {
         (item) => item.key !== "thaotac"
       );
     }
-  },
+  }
 };
 </script>
 <style scoped>
