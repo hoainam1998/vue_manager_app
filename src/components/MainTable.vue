@@ -33,6 +33,7 @@
       :fields="objData.fields"
       :perPage="perPage"
       :currentPage="currentPage"
+      :busy="is_loaded"
       v-bind="$attrs"
       v-on="$listeners"
       custom-prop="any"
@@ -43,10 +44,14 @@
         </button>
       </template>
 
-      <template
-        v-for="(_, name) in $scopedSlots"
-        v-slot:[name]="slotData"
-      >
+      <template #table-busy>
+        <div class="text-center text-danger my-2">
+          <b-spinner class="align-middle"></b-spinner>
+          <strong>Loading...</strong>
+        </div>
+      </template>
+
+      <template v-for="(_, name) in $scopedSlots" v-slot:[name]="slotData">
         <slot :name="name" v-bind="slotData" />
       </template>
     </b-table>
@@ -79,9 +84,10 @@ export default {
       reset: Function,
       setItem: Function,
       showDetail: Function,
-      fields: Array
+      fields: Array,
     },
-    items: Array
+    items: Array,
+    is_loaded: Boolean,
   },
   data() {
     return {
@@ -93,15 +99,15 @@ export default {
         { value: 100, text: "100" },
       ],
       search_value: "",
-      is_admin: false
+      is_admin: false,
     };
   },
   computed: {
     rows() {
-      return this.objData.data.length;
+      return this.items.length;
     },
     totalPage() {
-      return Math.ceil(this.objData.data.length / this.perPage);
+      return Math.ceil(this.items.length / this.perPage);
     }
   },
   methods: {
@@ -117,7 +123,7 @@ export default {
 
     reset() {
       this.objData.reset();
-    }
+    },
   },
   created() {
     let user = JSON.parse(sessionStorage.getItem("user_authen"));
@@ -130,7 +136,7 @@ export default {
         (item) => item.key !== "thaotac"
       );
     }
-  }
+  },
 };
 </script>
 <style scoped>

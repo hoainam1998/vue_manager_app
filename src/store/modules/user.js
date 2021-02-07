@@ -14,10 +14,8 @@ const getters = {
 }
 
 const actions = {
-    setUsers({ commit }) {
-        axios.get(`/user.json`)
-            .then(res => commit('setUsers', res.data))
-            .catch(err => console.log(err.message))
+    getUsersFromAPI() {
+        return axios.get(`/user.json`)
     },
 
     setUserById({commit},id){

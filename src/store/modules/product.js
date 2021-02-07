@@ -3,7 +3,7 @@ const state = {
     products: [],
     listProductSearch: [],
     product: null,
-    is_product_loaded: false
+    is_product_loaded: true
 };
 
 const getters = {
@@ -14,14 +14,8 @@ const getters = {
 }
 
 const actions = {
-    setProducts({ commit }) {
-        axios.get(`/product.json`)
-            .then(res => {
-                setTimeout(() => {
-                    commit('setProducts', res.data)
-                }, 10000)
-            })
-            .catch(err => console.log(err.message))
+    getProductsFromAPI() {
+        return axios.get(`/product.json`)  
     },
 
     setProduct({ commit }, product) {
@@ -53,7 +47,7 @@ const actions = {
 const mutations = {
     setProducts: (state, products) => {
         state.products = products
-        state.is_product_loaded=true
+        state.is_product_loaded=false
     },
 
     setProduct: (state, product) => {
