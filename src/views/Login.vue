@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate"
 import { required, minLength } from "vuelidate/lib/validators"
 export default {
@@ -79,7 +79,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions("user", ["setUsers"]),
     ...mapGetters("user", ["getUsers"]),
     handleSubmit() {
       this.validateSubmit()
@@ -123,9 +122,6 @@ export default {
         return;
       }
     }
-  },
-  created() {
-    this.setUsers();
   },
   beforeRouteEnter(to, from, next) {
     let user = JSON.parse(sessionStorage.getItem("user_authen"));

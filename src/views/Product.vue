@@ -1,5 +1,5 @@
 <template>
-  <MainTable :objData="products" :items="getProducts_">
+  <MainTable :objData="products" :items="getProducts_" :is_loaded="get_is_product_loaded_">
     <template #cell(gia)="data">
       {{
         parseInt(data.value).toLocaleString("it-IT", {
@@ -11,7 +11,7 @@
   </MainTable>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters , mapMutations} from "vuex";
 import MainTable from "../components/MainTable";
 export default {
   name: "Product",
@@ -41,16 +41,16 @@ export default {
   computed:{
     getProducts_(){
       return this.getProducts();
+    },
+
+    get_is_product_loaded_(){
+      return this.get_is_product_loaded()
     }
   },
   methods: {
     ...mapActions("product", ["searchProduct","setProduct"]),
-    ...mapGetters("product", ["getProducts", "getProductSearched","getValueAfterLoaded"]),
-
-    setDataProduct() {
-      this.products.data = this.getProducts();
-      //this.setProduct.then(res => this.products.data = res);
-    },
+    ...mapGetters("product", ["getProducts", "getProductSearched","get_is_product_loaded"]),
+    ...mapMutations('product',['setProducts']),
 
     searchProducts(valueSearch) {
       this.searchProduct(valueSearch);
@@ -70,9 +70,6 @@ export default {
     showDetailUpdateProduct(id) {
       this.$router.push("product/update-product/" + id);
     }
-  },
-  created() {
-    this.setDataProduct();
   }
 };
 </script>

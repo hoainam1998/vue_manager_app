@@ -5,16 +5,18 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions , mapMutations} from "vuex";
 export default {
   name: "App",
   methods: {
-    ...mapActions("user", ["setUsers"]),
-    ...mapActions("product", ["setProducts"]),
+    ...mapActions("user", ["getUsersFromAPI"]),
+    ...mapActions("product", ["getProductsFromAPI"]),
+    ...mapMutations('product',['setProducts']),
+    ...mapMutations('user',['setUsers'])
   },
   created() {
-    this.setUsers()
-    this.setProducts()
+    this.getUsersFromAPI().then(res=>this.setUsers(res.data))
+    this.getProductsFromAPI().then(res=>setTimeout(()=>this.setProducts(res.data),10000))
   }
 };
 </script>
