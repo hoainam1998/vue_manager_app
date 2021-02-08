@@ -1,68 +1,68 @@
 <template>
   <section class="content">
-    <b-form @submit.stop.prevent="handleSubmit">
-      <div class="layout_form title_form">
-        <b-form-group
-          id="example-input-group-1"
-          label="Ten san pham"
-          label-for="example-input-1"
-        >
-          <b-form-input
-            id="example-input-1"
-            name="example-input-1"
-            aria-describedby="input-1-live-feedback"
-            v-model="$v.sanpham.tensanpham.$model"
-            :state="validateState('tensanpham')"
-            :disabled="disabled"
-          ></b-form-input>
-
-          <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 4 characters and most
-            15 characters.</b-form-invalid-feedback
+    <b-overlay :show="is_products_load" rounded="sm">
+      <b-form @submit.stop.prevent="handleSubmit">
+        <div class="layout_form title_form">
+          <b-form-group
+            id="example-input-group-1"
+            label="Ten san pham"
+            label-for="example-input-1"
           >
-        </b-form-group>
+            <b-form-input
+              id="example-input-1"
+              name="example-input-1"
+              aria-describedby="input-1-live-feedback"
+              v-model="$v.sanpham.tensanpham.$model"
+              :state="validateState('tensanpham')"
+              :disabled="disabled"
+            ></b-form-input>
 
-        <b-form-group
-          id="example-input-group-1"
-          label="Gia san pham"
-          label-for="example-input-1"
-        >
-          <b-form-input
-            id="example-input-1"
-            name="example-input-1"
-            aria-describedby="input-1-live-feedback"
-            v-model="$v.sanpham.gia.$model"
-            :state="validateState('gia')"
-          ></b-form-input>
-
-          <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 4 characters and is
-            number.</b-form-invalid-feedback
+            <b-form-invalid-feedback id="input-1-live-feedback"
+              >This is a required field and must be at least 4 characters and
+              most 15 characters.</b-form-invalid-feedback
+            >
+          </b-form-group>
+          <b-form-group
+            id="example-input-group-1"
+            label="Gia san pham"
+            label-for="example-input-1"
           >
-        </b-form-group>
-      </div>
+            <b-form-input
+              id="example-input-1"
+              name="example-input-1"
+              aria-describedby="input-1-live-feedback"
+              v-model="$v.sanpham.gia.$model"
+              :state="validateState('gia')"
+            ></b-form-input>
 
-      <div class="displayflex">
-        <b-form-checkbox
-          id="checkbox-1"
-          name="trangthai_checkbox"
-          v-model="sanpham.trangthai"
-          value="Hoat dong"
-          unchecked-value="Ko hoat dong"
-        >
-          Trang thai
-        </b-form-checkbox>
-        <div>
-          <b-button type="submit" variant="success">{{
-            disabled ? "Cap nhap" : "Tao"
-          }}</b-button>
-          <b-button class="ml-2" variant="success"
-            ><router-link to="/home/product">Huy</router-link></b-button
-          >
+            <b-form-invalid-feedback id="input-1-live-feedback"
+              >This is a required field and must be at least 4 characters and is
+              number.</b-form-invalid-feedback
+            >
+          </b-form-group>
         </div>
-      </div>
-    </b-form>
-    <span style="display: none">{{ is_product_loaded }}</span>
+
+        <div class="displayflex">
+          <b-form-checkbox
+            id="checkbox-1"
+            name="trangthai_checkbox"
+            v-model="sanpham.trangthai"
+            value="Hoat dong"
+            unchecked-value="Ko hoat dong"
+          >
+            Trang thai
+          </b-form-checkbox>
+          <div>
+            <b-button type="submit" variant="success">
+              {{ disabled ? "Cap nhap" : "Tao" }}
+            </b-button>
+            <b-button class="ml-2" variant="success"
+              ><router-link to="/home/product">Huy</router-link></b-button
+            >
+          </div>
+        </div>
+      </b-form>
+    </b-overlay>
   </section>
 </template>
 <script>
@@ -86,7 +86,13 @@ export default {
         trangthai: "Ko hoat dong",
       },
       disabled: false,
+      updated: true,
     };
+  },
+  computed: {
+    is_products_load() {
+      return this.get_is_products_load();
+    },
   },
   mixins: [validationMixin, GetDate],
   validations: {
@@ -104,10 +110,15 @@ export default {
     },
   },
   methods: {
-    ...mapActions("product", ["addProduct", "updateProduct", "setProductById"]),
+    ...mapActions("product", [
+      "addProduct",
+      "updateProduct",
+      "setProductById",
+      "setProduct",
+    ]),
     ...mapGetters("product", [
       "getProduct",
-      "get_is_product_loaded",
+      "get_is_products_load",
       "getProducts",
     ]),
 
@@ -129,11 +140,16 @@ export default {
     },
 
     save() {
-      if (this.disabled) {
-        this.sanpham.ngaycapnhapganday = this.getDate();
-        this.updateProduct(this.sanpham);
-      } else {
-        this.createProduct();
+      try {
+        if (this.disabled) {
+          this.sanpham.ngaycapnhapganday = this.getDate();
+          this.updateProduct(this.sanpham);
+        } else {
+          this.createProduct();
+        }
+        this.$router.push("/home/product");
+      } catch (err) {
+        console.log(err.message);
       }
     },
 
@@ -143,40 +159,47 @@ export default {
         return;
       }
       this.save();
-      this.$router.push("/home/product");
     },
 
     getProductById() {
       let product = this.getProduct();
-      if (this.$route.params.id && !product) {
+      if (!product) {
         this.setProductById(this.$route.params.id);
       }
     },
 
     getProduct_show() {
       this.getProductById();
-      let sanpham = this.getProduct();
-      if (sanpham) {
-        this.sanpham = sanpham;
-        this.disabled = true;
+      try {
+        let sanpham = JSON.parse(JSON.stringify(this.getProduct()));
+        console.log(sanpham)
+        if (sanpham) {
+          this.sanpham = sanpham;
+          this.disabled = true;
+        }
+      } catch (err) {
+        console.log(err.message);
       }
     }
   },
-  
+
   created() {
-    this.getProduct_show();
+    if(this.$route.params.id){
+      this.getProduct_show();
+    }
+    
   },
 
   updated() {
-    if (this.is_product_loaded) {
+    console.log(this.is_products_load)
+    if (this.is_products_load && this.updated && this.$route.params.id) {
       this.getProduct_show();
+      this.updated = false;
     }
   },
-  
-  computed: {
-    is_product_loaded() {
-      return this.get_is_product_loaded();
-    },
+
+  beforeDestroy() {
+    this.setProduct(null);
   },
 };
 </script>

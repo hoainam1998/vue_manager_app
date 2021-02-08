@@ -2,6 +2,7 @@
   <section class="content">
     <div class="manipulation">
       <div>
+        {{is_load}}
         <h2>Danh sach {{ objData.title }}</h2>
         <!-- button create-->
         <b-button variant="success" v-if="is_admin">
@@ -29,11 +30,11 @@
 
     <!-- table -->
     <b-table
-      :items="items"
+      :items="items_"
       :fields="objData.fields"
       :perPage="perPage"
       :currentPage="currentPage"
-      :busy="is_loaded"
+      :busy="is_load"
       v-bind="$attrs"
       v-on="$listeners"
       custom-prop="any"
@@ -74,6 +75,7 @@
   </section>
 </template>
 <script>
+import auth from "../auth_mixin";
 export default {
   name: "MainTable",
   props: {
@@ -87,8 +89,9 @@ export default {
       fields: Array,
     },
     items: Array,
-    is_loaded: Boolean,
+    is_load: Boolean,
   },
+  mixins: [auth],
   data() {
     return {
       perPage: 20,
@@ -99,7 +102,8 @@ export default {
         { value: 100, text: "100" },
       ],
       search_value: "",
-      is_admin: false,
+      items_: [],
+      updated: true,
     };
   },
   computed: {
@@ -108,33 +112,35 @@ export default {
     },
     totalPage() {
       return Math.ceil(this.items.length / this.perPage);
-    }
+    },
   },
   methods: {
     show(item) {
-      this.objData.setItem(item);
-      this.objData.showDetail(item.id);
+      this.objData.setItem_andShow(item);
     },
 
     searchItem() {
-      this.objData.search(this.search_value);
+      this.items_ = this.objData.search(this.search_value);
       this.search_value = "";
     },
 
     reset() {
-      this.objData.reset();
+      this.items_=this.objData.reset();
     },
   },
   created() {
-    let user = JSON.parse(sessionStorage.getItem("user_authen"));
-    if (user.admin) {
-      this.is_admin = true;
-    }
-
-    if (!user.admin) {
+    this.items_ = this.items;
+    this.auth();
+    if (!this.is_admin) {
       this.objData.fields = this.objData.fields.filter(
         (item) => item.key !== "thaotac"
       );
+    }
+  },
+  updated() {
+    if (this.items_.length === 0 && this.updated) {
+      this.items_ = this.items;
+      this.updated=false;
     }
   },
 };

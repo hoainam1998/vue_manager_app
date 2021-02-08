@@ -3,7 +3,7 @@
     <div class="user_box" @click="show_boxInfor">
       <img src="../assets/user.svg" alt="logo" />
       <span>{{ this.username }}<i class="fas fa-caret-down"></i></span>
-      <ul class="box_infor">
+      <ul class="box_infor" v-if="show">
         <li>Ho so</li>
         <li @click="logout($event)">Thoat</li>
       </ul>
@@ -16,16 +16,12 @@ export default {
   data() {
     return {
       username: "",
+      show: false
     };
   },
   methods: {
     show_boxInfor() {
-      let box=document.querySelector('.box_infor')
-      if(box.style.display==="block"){
-        box.style.display="none"
-      }else {
-         box.style.display="block"
-      }
+      this.show=!this.show;
     },
     logout($event){
       $event.stopPropagation();
@@ -80,10 +76,5 @@ export default {
   background: white;
   width: 120px;
   text-align: center;
-  display: none;
-}
-
-.show_box {
-  display: block;
 }
 </style>

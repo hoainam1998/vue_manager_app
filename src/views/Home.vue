@@ -12,9 +12,6 @@ export default {
   components: {
     Menu,
     MainContent
-  },
-   updated(){
-    console.log('updated')
   }
 };
 </script>

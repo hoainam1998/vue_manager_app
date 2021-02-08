@@ -3,14 +3,14 @@ const state = {
     users: [],
     listUserSearched: [],
     user: null,
-    is_user_loaded: false
+    is_users_load: true
 }
 
 const getters = {
     getUsers: (state) => (state.users),
     getUserSearched: (state) => (state.listUserSearched),
     getUser: (state)=>(state.user),
-    get_is_user_loaded:(state)=>(state.is_user_loaded)
+    get_is_users_load:(state)=>(state.is_users_load)
 }
 
 const actions = {
@@ -43,7 +43,7 @@ const actions = {
 const mutations = {
     setUsers: (state, users) => {
         state.users = users
-        state.is_user_loaded=true
+        state.is_users_load=false
     },
 
     setUser:(state,user)=>{
@@ -68,7 +68,7 @@ const mutations = {
             }
             state.listUserSearched = listSearch;
         })
-    },
+    }
 }
 
 export default { namespaced: true, state, actions, getters, mutations }

@@ -3,14 +3,14 @@ const state = {
     products: [],
     listProductSearch: [],
     product: null,
-    is_product_loaded: true
+    is_products_load: true,
 };
 
 const getters = {
     getProducts: (state) => (state.products),
     getProductSearched: (state) => (state.listProductSearch),
     getProduct: (state) => (state.product),
-    get_is_product_loaded: (state) => (state.is_product_loaded)
+    get_is_products_load: (state) => (state.is_products_load),
 }
 
 const actions = {
@@ -47,7 +47,7 @@ const actions = {
 const mutations = {
     setProducts: (state, products) => {
         state.products = products
-        state.is_product_loaded=false
+        state.is_products_load=false
     },
 
     setProduct: (state, product) => {
