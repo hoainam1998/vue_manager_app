@@ -1,87 +1,88 @@
 <template>
   <section class="content">
-    <b-form @submit.stop.prevent="handleSubmit">
-      <div class="layout_form title_form">
-        <b-form-group
-          id="example-input-group-1"
-          label="Ten dang nhap"
-          label-for="example-input-1"
-        >
-          <b-form-input
-            id="example-input-1"
-            name="example-input-1"
-            aria-describedby="input-1-live-feedback"
-            v-model="$v.user.tendangnhap.$model"
-            :state="validateState('tendangnhap')"
-            :disabled="disabled"
-          ></b-form-input>
-
-          <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 4 characters and most
-            15 characters.</b-form-invalid-feedback
+    <b-overlay :show="is_users_load" rounded="sm">
+      <b-form @submit.prevent="handleSubmit">
+        <div class="layout_form title_form">
+          <b-form-group
+            id="example-input-group-1"
+            label="Ten dang nhap"
+            label-for="example-input-1"
           >
-        </b-form-group>
+            <b-form-input
+              id="example-input-1"
+              name="example-input-1"
+              aria-describedby="input-1-live-feedback"
+              v-model="$v.user.tendangnhap.$model"
+              :state="validateState('tendangnhap')"
+              :disabled="disabled"
+            ></b-form-input>
 
-        <b-form-group
-          id="example-input-group-1"
-          label="Ten nhan vien"
-          label-for="example-input-1"
-        >
-          <b-form-input
-            id="example-input-1"
-            name="example-input-1"
-            aria-describedby="input-1-live-feedback"
-            v-model="$v.user.tendaydu.ten.$model"
-            :state="validateState('ten')"
-          ></b-form-input>
+            <b-form-invalid-feedback id="input-1-live-feedback"
+              >This is a required field and must be at least 4 characters and
+              most 15 characters.</b-form-invalid-feedback
+            >
+          </b-form-group>
 
-          <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 2 characters and most
-            15 characters.</b-form-invalid-feedback
+          <b-form-group
+            id="example-input-group-1"
+            label="Ten nhan vien"
+            label-for="example-input-1"
           >
-        </b-form-group>
+            <b-form-input
+              id="example-input-1"
+              name="example-input-1"
+              aria-describedby="input-1-live-feedback"
+              v-model="$v.user.tendaydu.ten.$model"
+              :state="validateState('ten')"
+            ></b-form-input>
 
-        <b-form-group
-          id="example-input-group-1"
-          label="Ho nhan vien"
-          label-for="example-input-1"
-        >
-          <b-form-input
-            id="example-input-1"
-            name="example-input-1"
-            aria-describedby="input-1-live-feedback"
-            v-model="$v.user.tendaydu.ho.$model"
-            :state="validateState('ho')"
-          ></b-form-input>
+            <b-form-invalid-feedback id="input-1-live-feedback"
+              >This is a required field and must be at least 2 characters and
+              most 15 characters.</b-form-invalid-feedback
+            >
+          </b-form-group>
 
-          <b-form-invalid-feedback id="input-1-live-feedback"
-            >This is a required field and must be at least 2 characters and most
-            6 characters.</b-form-invalid-feedback
+          <b-form-group
+            id="example-input-group-1"
+            label="Ho nhan vien"
+            label-for="example-input-1"
           >
-        </b-form-group>
-      </div>
+            <b-form-input
+              id="example-input-1"
+              name="example-input-1"
+              aria-describedby="input-1-live-feedback"
+              v-model="$v.user.tendaydu.ho.$model"
+              :state="validateState('ho')"
+            ></b-form-input>
 
-      <div class="displayflex">
-        <b-form-checkbox
-          id="checkbox-1"
-          name="trangthai_checkbox"
-          v-model="user.trangthai"
-          value="Dang lam"
-          unchecked-value="Da nghi"
-        >
-          Trang thai
-        </b-form-checkbox>
-        <div class="btn_group">
-          <b-button type="submit" variant="success">{{
-            disabled ? "Cap nhap" : "Tao"
-          }}</b-button>
-          <b-button class="ml-2" variant="success"
-            ><router-link to="/home/user">Huy</router-link></b-button
-          >
+            <b-form-invalid-feedback id="input-1-live-feedback"
+              >This is a required field and must be at least 2 characters and
+              most 6 characters.</b-form-invalid-feedback
+            >
+          </b-form-group>
         </div>
-      </div>
-    </b-form>
-    <span style="display: none">{{ is_user_loaded }}</span>
+
+        <div class="displayflex">
+          <b-form-checkbox
+            id="checkbox-1"
+            name="trangthai_checkbox"
+            v-model="user.trangthai"
+            value="Dang lam"
+            unchecked-value="Da nghi"
+          >
+            Trang thai
+          </b-form-checkbox>
+          <div class="btn_group">
+            <b-button type="submit" variant="success">{{
+              disabled ? "Cap nhap" : "Tao"
+            }}</b-button>
+            <b-button class="ml-2" variant="success"
+              ><router-link to="/home/user">Huy</router-link></b-button
+            >
+          </div>
+        </div>
+      </b-form>
+    </b-overlay>
   </section>
 </template>
 <script>
@@ -102,7 +103,13 @@ export default {
         trangthai: "Da nghi",
       },
       disabled: false,
+      updated: true,
     };
+  },
+  computed: {
+    is_users_load() {
+      return this.get_is_users_load();
+    },
   },
   validations: {
     user: {
@@ -127,12 +134,8 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      "addUser",
-      "updateUser",
-      "setUserById"
-    ]),
-    ...mapGetters(["getUser","get_is_user_loaded"]),
+    ...mapActions(["addUser", "updateUser", "setUserById", "setUser"]),
+    ...mapGetters(["getUser", "getUsers", "get_is_users_load"]),
     validateState(name) {
       if (name === "ho" || name === "ten") {
         const { $dirty, $error } = this.$v.user.tendaydu[name];
@@ -150,6 +153,7 @@ export default {
       }
       this.save();
     },
+
     save() {
       try {
         if (this.disabled) {
@@ -159,7 +163,7 @@ export default {
         }
         this.$router.push("/home/user");
       } catch (err) {
-        console.log(err);
+        console.log(err.message);
       }
     },
 
@@ -182,37 +186,41 @@ export default {
 
     getUserById() {
       let user = this.getUser();
-      if (this.$route.params.id && !user) {
+      if (!user) {
         this.setUserById(this.$route.params.id);
       }
     },
-  },
-  created() {
-    this.getUserById();
-    let user = this.getUser();
-    if (user) {
-      this.user = user;
-      this.disabled = true;
-    }
-  },
-  updated() {
-    if (this.is_user_loaded) {
+
+    getUser_show() {
       this.getUserById();
-      let user = this.getUser();
-      if (user) {
-        this.user = user;
-        this.disabled = true;
-      }
+      try {
+        let user = JSON.parse(JSON.stringify(this.getUser()));
+        if (user) {
+          this.user = user;
+          this.disabled = true;
+        }
+      }catch(err){console.log(err.message)}
     }
   },
-  computed: {
-    is_user_loaded() {
-      return this.get_is_user_loaded();
-    },
+
+  created() {
+    this.getUser_show();
+  },
+
+  updated() {
+    if (this.is_users_loaded && this.updated) {
+      this.getUser_show();
+      this.updated = false;
+    }
+  },
+
+  beforeDestroy() {
+    this.setUser(null);
   },
 };
 </script>
 <style scoped>
+
 .layout_form {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

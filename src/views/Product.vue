@@ -1,5 +1,5 @@
 <template>
-  <MainTable :objData="products" :items="getProducts_" :is_loaded="get_is_product_loaded_">
+  <MainTable :objData="products" :items="getProducts_" :is_load="is_products_load">
     <template #cell(gia)="data">
       {{
         parseInt(data.value).toLocaleString("it-IT", {
@@ -11,7 +11,7 @@
   </MainTable>
 </template>
 <script>
-import { mapActions, mapGetters , mapMutations} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import MainTable from "../components/MainTable";
 export default {
   name: "Product",
@@ -23,7 +23,7 @@ export default {
         title: "san pham",
         search: this.searchProducts,
         reset: this.resetProducts,
-        setItem: this.setSpecificProduct_,
+        setItem_andShow: this.setSpecificProduct_andShow,
         showDetail: this.showDetailUpdateProduct,
         getValueAfterLoaded: this.getValueAfterLoaded_,
         fields: [
@@ -35,40 +35,36 @@ export default {
           { key: "trangthai", label: "Trạng Thái" },
           { key: "thaotac", label: "Thao Tac" },
         ],
-      },
+      }
     };
   },
   computed:{
     getProducts_(){
-      return this.getProducts();
+      return this.getProducts()
     },
 
-    get_is_product_loaded_(){
-      return this.get_is_product_loaded()
+    is_products_load(){
+      return this.get_is_products_load()
     }
   },
   methods: {
     ...mapActions("product", ["searchProduct","setProduct"]),
-    ...mapGetters("product", ["getProducts", "getProductSearched","get_is_product_loaded"]),
-    ...mapMutations('product',['setProducts']),
+    ...mapGetters("product", ["getProducts", "getProductSearched","get_is_products_load"]),
 
     searchProducts(valueSearch) {
       this.searchProduct(valueSearch);
       let products = this.getProductSearched();
-      this.products.data = products;
+      return products;
     },
 
     resetProducts() {
       let products = this.getProducts();
-      this.products.data = products;
+      return products;
     },
 
-    setSpecificProduct_(product) {
+    setSpecificProduct_andShow(product) {
      this.setProduct(product);
-    },
-
-    showDetailUpdateProduct(id) {
-      this.$router.push("product/update-product/" + id);
+     this.$router.push("product/update-product/" + product.id);
     }
   }
 };

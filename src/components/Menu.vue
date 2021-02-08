@@ -6,7 +6,7 @@
         <span v-b-toggle.collapse-1 class="toggle_link">Cai dat<i class="fas fa-caret-down"></i></span>
         <b-collapse id="collapse-1">
         <ul class="sub_list">
-          <li v-if="show">
+          <li v-if="is_admin">
             <router-link to="/home/user">Nguoi dung</router-link>
           </li>
           <li><router-link to="/home/product">San pham</router-link></li>
@@ -18,18 +18,12 @@
   </section>
 </template>
 <script>
+import auth from '../auth_mixin';
 export default {
   name: "Menu",
-  data() {
-    return {
-      show: false,
-    };
-  },
+  mixins:[auth],
   created() {
-    let user = JSON.parse(sessionStorage.getItem("user_authen"));
-    if (user.admin) {
-      this.show = true;
-    }
+    this.auth();
   },
 };
 </script>
