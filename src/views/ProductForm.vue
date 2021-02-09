@@ -1,5 +1,6 @@
 <template>
   <section class="content">
+    {{ is_products_load }}
     <b-overlay :show="is_products_load" rounded="sm">
       <b-form @submit.stop.prevent="handleSubmit">
         <div class="layout_form title_form">
@@ -53,9 +54,23 @@
             Trang thai
           </b-form-checkbox>
           <div>
-            <b-button type="submit" variant="success">
-              {{ disabled ? "Cap nhap" : "Tao" }}
-            </b-button>
+            <b-overlay
+              :show="handle_create"
+              rounded
+              opacity="0.6"
+              spinner-small
+              spinner-variant="primary"
+              class="d-inline-block"
+            >
+              {{ handle_create }}
+              <b-button
+                type="submit"
+                variant="success"
+                :disabled="handle_create"
+              >
+                {{ disabled ? "Cap nhap" : "Tao" }}
+              </b-button>
+            </b-overlay>
             <b-button class="ml-2" variant="success"
               ><router-link to="/home/product">Huy</router-link></b-button
             >
@@ -87,11 +102,32 @@ export default {
       },
       disabled: false,
       updated: true,
+      handle_create: false,
     };
   },
   computed: {
     is_products_load() {
+      if (this.$route.params.id) {
+        return this.get_is_products_load();
+      } else {
+        return false;
+      }
+    },
+
+    process_create_product() {
       return this.get_is_products_load();
+    },
+  },
+
+  watch: {
+    process_create_product(new_value) {
+      this.handle_create = new_value;
+    },
+
+    handle_create(new_value) {
+      if (!new_value) {
+        this.createProduct();
+      }
     },
   },
   mixins: [validationMixin, GetDate],
@@ -105,7 +141,7 @@ export default {
         required,
         minLength: minLength(4),
         maxLength: maxLength(8),
-        numeric,
+        numeric
       },
     },
   },
@@ -137,17 +173,22 @@ export default {
         trangthai: this.sanpham.trangthai,
       };
       this.addProduct(product);
+      this.$router.push("/home/product");
+    },
+
+    updateProduct_(sanpham){
+      this.updateProduct(sanpham)
+      this.$router.push("/home/product")
     },
 
     save() {
       try {
         if (this.disabled) {
           this.sanpham.ngaycapnhapganday = this.getDate();
-          this.updateProduct(this.sanpham);
+          this.updateProduct_(this.sanpham);
         } else {
-          this.createProduct();
+          this.handle_create = true;
         }
-        this.$router.push("/home/product");
       } catch (err) {
         console.log(err.message);
       }
@@ -172,7 +213,6 @@ export default {
       this.getProductById();
       try {
         let sanpham = JSON.parse(JSON.stringify(this.getProduct()));
-        console.log(sanpham)
         if (sanpham) {
           this.sanpham = sanpham;
           this.disabled = true;
@@ -180,19 +220,17 @@ export default {
       } catch (err) {
         console.log(err.message);
       }
-    }
+    },
   },
 
   created() {
-    if(this.$route.params.id){
+    if (typeof this.$route.params.id !== "undefined") {
       this.getProduct_show();
     }
-    
   },
 
   updated() {
-    console.log(this.is_products_load)
-    if (this.is_products_load && this.updated && this.$route.params.id) {
+    if (!this.is_products_load && this.updated && this.$route.params.id) {
       this.getProduct_show();
       this.updated = false;
     }
