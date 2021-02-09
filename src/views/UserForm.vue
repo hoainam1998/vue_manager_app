@@ -72,10 +72,20 @@
           >
             Trang thai
           </b-form-checkbox>
+
           <div class="btn_group">
-            <b-button type="submit" variant="success">{{
-              disabled ? "Cap nhap" : "Tao"
-            }}</b-button>
+            <b-overlay
+              :show="process_create_user"
+              rounded
+              opacity="0.6"
+              spinner-small
+              spinner-variant="primary"
+              class="d-inline-block"
+            >
+              <b-button type="submit" variant="success">{{
+                disabled ? "Cap nhap" : "Tao"
+              }}</b-button>
+            </b-overlay>
             <b-button class="ml-2" variant="success"
               ><router-link to="/home/user">Huy</router-link></b-button
             >
@@ -108,6 +118,14 @@ export default {
   },
   computed: {
     is_users_load() {
+      if (this.$route.params.id) {
+        return this.get_is_users_load();
+      } else {
+        return false;
+      }
+    },
+
+    process_create_user() {
       return this.get_is_users_load();
     },
   },
@@ -161,7 +179,6 @@ export default {
         } else {
           this.createUser();
         }
-        this.$router.push("/home/user");
       } catch (err) {
         console.log(err.message);
       }
@@ -178,10 +195,12 @@ export default {
         trangthai: this.user.trangthai,
       };
       this.addUser(user_obj);
+      this.$router.push("/home/user");
     },
 
     updateUser_() {
       this.updateUser(this.user);
+      this.$router.push("/home/user");
     },
 
     getUserById() {
@@ -199,16 +218,20 @@ export default {
           this.user = user;
           this.disabled = true;
         }
-      }catch(err){console.log(err.message)}
-    }
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
 
   created() {
-    this.getUser_show();
+    if (typeof this.$route.params.id !== "undefined") {
+      this.getUser_show();
+    }
   },
 
   updated() {
-    if (this.is_users_loaded && this.updated) {
+    if (!this.is_users_load && this.updated && this.$route.params.id) {
       this.getUser_show();
       this.updated = false;
     }
@@ -220,7 +243,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .layout_form {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
