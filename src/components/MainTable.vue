@@ -2,7 +2,6 @@
   <section class="content">
     <div class="manipulation">
       <div>
-        {{is_load}}
         <h2>Danh sach {{ objData.title }}</h2>
         <!-- button create-->
         <b-button variant="success" v-if="is_admin">

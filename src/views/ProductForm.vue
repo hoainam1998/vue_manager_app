@@ -1,98 +1,49 @@
 <template>
-  <section class="content">
-    {{ is_products_load }}
-    <b-overlay :show="is_products_load" rounded="sm">
-      <b-form @submit.stop.prevent="handleSubmit">
-        <div class="layout_form title_form">
-          <b-form-group
-            id="example-input-group-1"
-            label="Ten san pham"
-            label-for="example-input-1"
-          >
-            <b-form-input
-              id="example-input-1"
-              name="example-input-1"
-              aria-describedby="input-1-live-feedback"
-              v-model="$v.sanpham.tensanpham.$model"
-              :state="validateState('tensanpham')"
-              :disabled="disabled"
-            ></b-form-input>
+  <main>
+    <MainForm
+      :trangthai.sync="sanpham.trangthai"
+      :is_update="disabled"
+      :handle_create="handle_create"
+      :is_load="is_products_load"
+      :checkbox_value="checkbox_trangthai_infor"
+      :handleSubmit="handleSubmit"
+      :to="'/home/product'"
+    >
+      <b-col cols="6">
+        <InputComponent
+          :input_infor="input_tensanpham_infor"
+          :disabled="disabled"
+        />
+      </b-col>
 
-            <b-form-invalid-feedback id="input-1-live-feedback"
-              >This is a required field and must be at least 4 characters and
-              most 15 characters.</b-form-invalid-feedback
-            >
-          </b-form-group>
-          <b-form-group
-            id="example-input-group-1"
-            label="Gia san pham"
-            label-for="example-input-1"
-          >
-            <b-form-input
-              id="example-input-1"
-              name="example-input-1"
-              aria-describedby="input-1-live-feedback"
-              v-model="$v.sanpham.gia.$model"
-              :state="validateState('gia')"
-            ></b-form-input>
-
-            <b-form-invalid-feedback id="input-1-live-feedback"
-              >This is a required field and must be at least 4 characters and is
-              number.</b-form-invalid-feedback
-            >
-          </b-form-group>
-        </div>
-
-        <div class="displayflex">
-          <b-form-checkbox
-            id="checkbox-1"
-            name="trangthai_checkbox"
-            v-model="sanpham.trangthai"
-            value="Hoat dong"
-            unchecked-value="Ko hoat dong"
-          >
-            Trang thai
-          </b-form-checkbox>
-          <div>
-            <b-overlay
-              :show="handle_create"
-              rounded
-              opacity="0.6"
-              spinner-small
-              spinner-variant="primary"
-              class="d-inline-block"
-            >
-              {{ handle_create }}
-              <b-button
-                type="submit"
-                variant="success"
-                :disabled="handle_create"
-              >
-                {{ disabled ? "Cap nhap" : "Tao" }}
-              </b-button>
-            </b-overlay>
-            <b-button class="ml-2" variant="success"
-              ><router-link to="/home/product">Huy</router-link></b-button
-            >
-          </div>
-        </div>
-      </b-form>
-    </b-overlay>
-  </section>
+      <b-col cols="6">
+        <InputComponent
+          :input_infor="input_gia_infor"
+        />
+      </b-col>
+    </MainForm>
+  </main>
 </template>
 <script>
+import InputInfor from "../input_infor";
 import { validationMixin } from "vuelidate";
-import GetDate from "../get_date_mixin";
 import {
   required,
   minLength,
   maxLength,
-  numeric,
+  numeric
 } from "vuelidate/lib/validators";
+import GetDate from "../get_date_mixin";
 import { mapActions, mapGetters } from "vuex";
 import { v4 } from "uuid";
+import MainForm from "../components/MainForm";
+import InputComponent from "../components/InputComponent";
 export default {
   name: "Create_Product",
+  components: {
+    MainForm,
+    InputComponent,
+  },
   data() {
     return {
       sanpham: {
@@ -100,9 +51,13 @@ export default {
         gia: "",
         trangthai: "Ko hoat dong",
       },
-      disabled: false,
       updated: true,
       handle_create: false,
+      disabled: false,
+
+      input_tensanpham_infor: InputInfor.input_tensanpham_infor,
+      input_gia_infor: InputInfor.input_giasanpham_infor,
+      checkbox_trangthai_infor: InputInfor.checkbox_trangthai_sanpham_infor
     };
   },
   computed: {
@@ -116,7 +71,7 @@ export default {
 
     process_create_product() {
       return this.get_is_products_load();
-    },
+    }
   },
 
   watch: {
@@ -131,6 +86,11 @@ export default {
     },
   },
   mixins: [validationMixin, GetDate],
+  provide() {
+    return {
+      $v: this.$v,
+    };
+  },
   validations: {
     sanpham: {
       tensanpham: {
@@ -141,7 +101,7 @@ export default {
         required,
         minLength: minLength(4),
         maxLength: maxLength(8),
-        numeric
+        numeric,
       },
     },
   },
@@ -158,11 +118,6 @@ export default {
       "getProducts",
     ]),
 
-    validateState(name) {
-      const { $dirty, $error } = this.$v.sanpham[name];
-      return $dirty ? !$error : null;
-    },
-
     createProduct() {
       const product = {
         id: v4(),
@@ -176,9 +131,9 @@ export default {
       this.$router.push("/home/product");
     },
 
-    updateProduct_(sanpham){
-      this.updateProduct(sanpham)
-      this.$router.push("/home/product")
+    updateProduct_(sanpham) {
+      this.updateProduct(sanpham);
+      this.$router.push("/home/product");
     },
 
     save() {
@@ -187,7 +142,11 @@ export default {
           this.sanpham.ngaycapnhapganday = this.getDate();
           this.updateProduct_(this.sanpham);
         } else {
-          this.handle_create = true;
+          if (this.process_create_product) {
+            this.handle_create = true;
+          } else {
+            this.createProduct();
+          }
         }
       } catch (err) {
         console.log(err.message);
@@ -241,22 +200,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.layout_form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 20px;
-  grid-row-gap: 15px;
-}
-
-a,
-a:hover {
-  color: white;
-  text-decoration: none;
-  display: block;
-}
-
-.btn-success {
-  width: 120px;
-}
-</style>

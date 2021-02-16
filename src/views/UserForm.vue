@@ -1,119 +1,78 @@
 <template>
-  <section class="content">
-    <b-overlay :show="is_users_load" rounded="sm">
-      <b-form @submit.prevent="handleSubmit">
-        <div class="layout_form title_form">
-          <b-form-group
-            id="example-input-group-1"
-            label="Ten dang nhap"
-            label-for="example-input-1"
-          >
-            <b-form-input
-              id="example-input-1"
-              name="example-input-1"
-              aria-describedby="input-1-live-feedback"
-              v-model="$v.user.tendangnhap.$model"
-              :state="validateState('tendangnhap')"
-              :disabled="disabled"
-            ></b-form-input>
-
-            <b-form-invalid-feedback id="input-1-live-feedback"
-              >This is a required field and must be at least 4 characters and
-              most 15 characters.</b-form-invalid-feedback
-            >
-          </b-form-group>
-
-          <b-form-group
-            id="example-input-group-1"
-            label="Ten nhan vien"
-            label-for="example-input-1"
-          >
-            <b-form-input
-              id="example-input-1"
-              name="example-input-1"
-              aria-describedby="input-1-live-feedback"
-              v-model="$v.user.tendaydu.ten.$model"
-              :state="validateState('ten')"
-            ></b-form-input>
-
-            <b-form-invalid-feedback id="input-1-live-feedback"
-              >This is a required field and must be at least 2 characters and
-              most 15 characters.</b-form-invalid-feedback
-            >
-          </b-form-group>
-
-          <b-form-group
-            id="example-input-group-1"
-            label="Ho nhan vien"
-            label-for="example-input-1"
-          >
-            <b-form-input
-              id="example-input-1"
-              name="example-input-1"
-              aria-describedby="input-1-live-feedback"
-              v-model="$v.user.tendaydu.ho.$model"
-              :state="validateState('ho')"
-            ></b-form-input>
-
-            <b-form-invalid-feedback id="input-1-live-feedback"
-              >This is a required field and must be at least 2 characters and
-              most 6 characters.</b-form-invalid-feedback
-            >
-          </b-form-group>
-        </div>
-
-        <div class="displayflex">
-          <b-form-checkbox
-            id="checkbox-1"
-            name="trangthai_checkbox"
-            v-model="user.trangthai"
-            value="Dang lam"
-            unchecked-value="Da nghi"
-          >
-            Trang thai
-          </b-form-checkbox>
-
-          <div class="btn_group">
-            <b-overlay
-              :show="process_create_user"
-              rounded
-              opacity="0.6"
-              spinner-small
-              spinner-variant="primary"
-              class="d-inline-block"
-            >
-              <b-button type="submit" variant="success">{{
-                disabled ? "Cap nhap" : "Tao"
-              }}</b-button>
-            </b-overlay>
-            <b-button class="ml-2" variant="success"
-              ><router-link to="/home/user">Huy</router-link></b-button
-            >
-          </div>
-        </div>
-      </b-form>
-    </b-overlay>
-  </section>
+  <MainForm
+    :trangthai.sync="user.trangthai"
+    :is_update="disabled"
+    :handle_create="handle_create"
+    :is_load="is_users_load"
+    :checkbox_value="checkbox_trangthai_infor"
+    :handleSubmit="handleSubmit"
+    :to="'/home/user'"
+  >
+    <b-col cols="6"
+      ><InputComponent
+        :input_infor="input_tendangnhap_infor"
+    /></b-col>
+    <b-col cols="6"></b-col>
+    <b-col cols="6"
+      ><InputComponent
+        :input_infor="input_tennhanvien_infor"
+    /></b-col>
+    <b-col cols="6"
+      ><InputComponent
+        :input_infor="input_honhanvien_infor"
+    /></b-col>
+    <b-modal centered id="bv-modal-example" hide-footer hide-header>
+      <h4 class="text-center">
+        Ten dang nhap {{ user.tendangnhap }} da ton tai.
+      </h4>
+      <b-button
+        variant="primary"
+        class="mt-3"
+        block
+        @click="$bvModal.hide('bv-modal-example')"
+        >Close Me</b-button
+      >
+    </b-modal>
+  </MainForm>
 </template>
 <script>
+import InputInfor from "../input_infor";
 import { validationMixin } from "vuelidate";
 import GetDate from "../get_date_mixin";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import { createNamespacedHelpers } from "vuex";
 const { mapActions, mapGetters } = createNamespacedHelpers("user");
 import { v4 } from "uuid";
+import MainForm from "../components/MainForm";
+import InputComponent from "../components/InputComponent";
 export default {
   name: "UserForm",
+  components: {
+    MainForm,
+    InputComponent,
+  },
   mixins: [validationMixin, GetDate],
+  provide() {
+    return {
+      $v: this.$v,
+    };
+  },
   data() {
     return {
       user: {
         tendangnhap: "",
-        tendaydu: { ten: "", ho: "" },
+        tennhanvien: "",
+        honhanvien: "",
         trangthai: "Da nghi",
       },
       disabled: false,
       updated: true,
+      handle_create: false,
+
+      input_tendangnhap_infor: InputInfor.input_tendangnhap_infor,
+      input_tennhanvien_infor: InputInfor.input_tennhanvien_infor,
+      input_honhanvien_infor: InputInfor.input_honhanvien_infor,
+      checkbox_trangthai_infor: InputInfor.checkbox_trangthai_user_infor,
     };
   },
   computed: {
@@ -129,6 +88,17 @@ export default {
       return this.get_is_users_load();
     },
   },
+  watch: {
+    process_create_user(new_value) {
+      this.handle_create = new_value;
+    },
+
+    handle_create(new_value) {
+      if (!new_value) {
+        this.createUser();
+      }
+    },
+  },
   validations: {
     user: {
       tendangnhap: {
@@ -136,33 +106,33 @@ export default {
         minLength: minLength(4),
         maxLength: maxLength(15),
       },
-      tendaydu: {
-        ten: {
-          required,
-          minLength: minLength(2),
-          maxLength: maxLength(15),
-        },
-        ho: {
-          required,
-          minLength: minLength(2),
-          maxLength: maxLength(6),
-        },
+      tennhanvien: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(15),
+      },
+      honhanvien: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(6),
       },
     },
   },
 
   methods: {
-    ...mapActions(["addUser", "updateUser", "setUserById", "setUser"]),
-    ...mapGetters(["getUser", "getUsers", "get_is_users_load"]),
-    validateState(name) {
-      if (name === "ho" || name === "ten") {
-        const { $dirty, $error } = this.$v.user.tendaydu[name];
-        return $dirty ? !$error : null;
-      } else {
-        const { $dirty, $error } = this.$v.user[name];
-        return $dirty ? !$error : null;
-      }
-    },
+    ...mapActions([
+      "addUser",
+      "updateUser",
+      "setUserById",
+      "setUser",
+      "check_user_existed",
+    ]),
+    ...mapGetters([
+      "getUser",
+      "getUsers",
+      "get_is_users_load",
+      "get_user_existed",
+    ]),
 
     handleSubmit() {
       this.$v.user.$touch();
@@ -172,12 +142,22 @@ export default {
       this.save();
     },
 
+    check_user_existed_() {
+      this.check_user_existed(this.user.tendangnhap);
+      let user_existed = this.get_user_existed();
+      return user_existed;
+    },
+
     save() {
       try {
         if (this.disabled) {
           this.updateUser_();
         } else {
-          this.createUser();
+          if (this.process_create_user) {
+            this.handle_create = true;
+          } else {
+            this.createUser();
+          }
         }
       } catch (err) {
         console.log(err.message);
@@ -185,21 +165,31 @@ export default {
     },
 
     createUser() {
-      const user_obj = {
-        id: v4(),
-        power: "user",
-        tendangnhap: this.user.tendangnhap,
-        matkhau: "123456",
-        tendaydu: this.user.tendaydu,
-        ngayduoctao: this.getDate(),
-        trangthai: this.user.trangthai,
-      };
-      this.addUser(user_obj);
-      this.$router.push("/home/user");
+      if (this.check_user_existed_()) {
+        this.$bvModal.show('bv-modal-example')
+      } else {
+        const user_obj = {
+          id: v4(),
+          power: "user",
+          tendangnhap: this.user.tendangnhap,
+          matkhau: "123456",
+          tendaydu: { ho: this.user.honhanvien, ten: this.user.tennhanvien },
+          ngayduoctao: this.getDate(),
+          trangthai: this.user.trangthai,
+        };
+        this.addUser(user_obj);
+        this.$router.push("/home/user");
+      }
     },
 
     updateUser_() {
-      this.updateUser(this.user);
+      let user = JSON.parse(JSON.stringify(this.getUser()));
+      const user_update = {
+        ...user,
+        tendaydu: { ho: this.user.honhanvien, ten: this.user.tennhanvien },
+        trangthai: this.user.trangthai,
+      };
+      this.updateUser(user_update);
       this.$router.push("/home/user");
     },
 
@@ -215,7 +205,10 @@ export default {
       try {
         let user = JSON.parse(JSON.stringify(this.getUser()));
         if (user) {
-          this.user = user;
+          this.user.tendangnhap = user.tendangnhap;
+          (this.user.honhanvien = user.tendaydu.ho),
+            (this.user.tennhanvien = user.tendaydu.ten),
+            (this.user.trangthai = user.trangthai);
           this.disabled = true;
         }
       } catch (err) {
@@ -242,24 +235,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.layout_form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 20px;
-}
-
-.layout_form div:nth-child(2) {
-  grid-row: 2;
-  grid-column: 1;
-}
-
-.layout_form div:last-child {
-  grid-row: 2;
-  grid-column: 2;
-}
-
-.btn_group button {
-  width: 120px;
-}
-</style>

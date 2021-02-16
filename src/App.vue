@@ -15,7 +15,7 @@ export default {
     ...mapMutations('user',['setUsers'])
   },
   created() {
-    this.getUsersFromAPI().then(res=>this.setUsers(res.data))
+    this.getUsersFromAPI().then(res=>setTimeout(()=>this.setUsers(res.data),8000))
     this.getProductsFromAPI().then(res=>setTimeout(()=>this.setProducts(res.data),10000))
   }
 };
@@ -78,9 +78,12 @@ a:hover {
   display: block;
 }
 
-.displayflex {
+.btn_group_layout {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+}
+
+.btn_group_layout .btn-success {
+  width: 120px;
 }
 </style>
