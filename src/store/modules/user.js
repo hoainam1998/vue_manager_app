@@ -3,14 +3,16 @@ const state = {
     users: [],
     listUserSearched: [],
     user: null,
-    is_users_load: true
+    is_users_load: true,
+    user_existed: false
 }
 
 const getters = {
     getUsers: (state) => (state.users),
     getUserSearched: (state) => (state.listUserSearched),
-    getUser: (state)=>(state.user),
-    get_is_users_load:(state)=>(state.is_users_load)
+    getUser: (state) => (state.user),
+    get_is_users_load: (state) => (state.is_users_load),
+    get_user_existed: (state) => (state.user_existed)
 }
 
 const actions = {
@@ -18,13 +20,13 @@ const actions = {
         return axios.get(`/user.json`)
     },
 
-    setUserById({commit},id){
-        let user=state.users.find(item=>item.id.toString()===id)
-        commit('setUser',user);
+    setUserById({ commit }, id) {
+        let user = state.users.find(item => item.id.toString() === id)
+        commit('setUser', user);
     },
 
-    setUser({commit},user){
-        commit('setUser',user)
+    setUser({ commit }, user) {
+        commit('setUser', user)
     },
 
     addUser({ commit }, user) {
@@ -37,17 +39,21 @@ const actions = {
 
     searchUser({ commit }, search) {
         commit('searchUser', search)
+    },
+
+    check_user_existed({ commit }, tendangnhap) {
+        commit('check_user_existed', tendangnhap)
     }
 }
 
 const mutations = {
     setUsers: (state, users) => {
         state.users = users
-        state.is_users_load=false
+        state.is_users_load = false
     },
 
-    setUser:(state,user)=>{
-        state.user=user
+    setUser: (state, user) => {
+        state.user = user
     },
 
     addUser: (state, user) => {
@@ -68,6 +74,18 @@ const mutations = {
             }
             state.listUserSearched = listSearch;
         })
+    },
+
+    check_user_existed: (state, tendangnhap) => {
+        console.log(tendangnhap)
+        let index = state.users.findIndex(user => user.tendangnhap === tendangnhap)
+        if (index !== -1) {
+            state.user_existed = true
+        }else {
+            state.user_existed=false
+        }
+
+        console.log(index+' '+state.user_existed)
     }
 }
 
